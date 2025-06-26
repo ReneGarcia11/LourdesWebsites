@@ -12,9 +12,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white">
       <Head>
-        <title>Dra. Lourdes Ramírez | Psicóloga Klínica</title>
+        <title>Psic. Lourdes Ramírez | Psicóloga Clínica</title>
         <meta name="description" content="Terapia psicológica especializada en intervención en crisis y tanatología" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favoico.ico" />
       </Head>
 
       <Navbar />
