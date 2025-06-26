@@ -135,7 +135,7 @@ const Header = () => {
               className="text-4xl sm:text-5xl md:text-6xl font-bold text-sky-900 leading-tight"
             >
               <span className="block bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-sky-800">
-                Dra. Lourdes Ramírez
+                Psic. Lourdes Ramírez
               </span>
             </motion.h1>
             

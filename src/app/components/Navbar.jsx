@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useInView } from 'react-intersection-observer'
 
 const Navbar = () => {
@@ -14,7 +15,6 @@ const Navbar = () => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10)
       
-      // Update active link based on scroll position
       const sections = document.querySelectorAll('section')
       sections.forEach(section => {
         const sectionTop = section.offsetTop - 100
@@ -32,10 +32,11 @@ const Navbar = () => {
     { name: 'Inicio', href: '#home' },
     { name: 'Servicios', href: '#services' },
     { name: 'Enfoque', href: '#objetives' },
-    { name: 'Opiniones', href: '#opinions' },
+    { name: 'Opiniones', href: '#opiniones' },
     { name: 'Contacto', href: '#contact' },
   ]
 
+  // Animaciones (se mantienen igual)
   const itemVariants = {
     hidden: { opacity: 0, y: -10 },
     visible: (i) => ({
@@ -153,45 +154,61 @@ const Navbar = () => {
           borderBottom: scrolled ? '1px solid rgba(224, 242, 254, 0.5)' : '1px solid transparent'
         }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className={`fixed w-full z-50 py-3 transition-all duration-300`}
+        className="fixed w-full z-50 py-3 transition-all duration-300"
       >
         <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
-          <Link href="#home" className="flex items-center">
+          {/* Logo mejorado */}
+          <Link href="#home" className="flex items-center group">
             <motion.div
-              whileHover="hover"
-              whileTap="tap"
-              className="flex items-center space-x-2"
+              className="flex items-center space-x-3"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <motion.div 
-                variants={logoVariants}
-                initial="initial"
-                animate="animate"
-                className="absolute w-12 h-12 border-2 border-sky-300 rounded-full"
-              />
-              <motion.div 
-                whileHover={{ rotate: 10 }}
-                whileTap={{ rotate: -10 }}
-                className="w-10 h-10 bg-gradient-to-br from-sky-400 to-sky-600 rounded-full flex items-center justify-center shadow-md z-10"
-              >
-                <motion.span 
-                  className="text-white font-bold text-lg"
-                  whileHover={{ scale: 1.1 }}
+              {/* Contenedor del logo con efecto sutil */}
+              <div className="relative">
+                {/* Marco decorativo animado */}
+                <motion.div 
+                  variants={logoVariants}
+                  initial="initial"
+                  animate="animate"
+                  className="absolute -inset-2 border-2 border-sky-200/50 rounded-full group-hover:border-sky-300 transition-all"
+                />
+                
+                {/* Contenedor de la imagen */}
+                <motion.div 
+                  className="relative w-12 h-12 rounded-full overflow-hidden shadow-lg z-10 border-2 border-white bg-white"
+                  whileHover={{ rotate: 5, scale: 1.05 }}
+                  whileTap={{ rotate: -5, scale: 0.95 }}
                 >
-                  LR
-                </motion.span>
-              </motion.div>
-              <motion.span 
+                  <Image 
+                    src="/images/Logo1.png"
+                    alt="Psicóloga Lourdes"
+                    width={48}
+                    height={48}
+                    className="object-cover object-center"
+                    priority
+                  />
+                </motion.div>
+              </div>
+
+              {/* Texto del nombre con animación mejorada */}
+              <motion.div
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3, type: 'spring' }}
-                className="text-sky-600 font-semibold hidden sm:block"
+                transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
+                className="flex flex-col"
               >
-                Dra. Lourdes
-              </motion.span>
+                <span className="text-sky-800 font-bold text-sm sm:text-base leading-tight">
+                  Psic. Lourdes
+                </span>
+                <span className="text-xs text-sky-500 hidden sm:block">
+                  Psicología Klínica
+                </span>
+              </motion.div>
             </motion.div>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Navegación desktop (se mantiene igual) */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item, i) => (
               <motion.div
@@ -219,11 +236,12 @@ const Navbar = () => {
                 </Link>
               </motion.div>
             ))}
-            <motion.button
+            <motion.a
               variants={buttonVariants}
               initial="initial"
               whileHover="hover"
               whileTap="tap"
+              href="#contact"
               className="bg-sky-500 text-white px-6 py-2 rounded-full font-semibold text-sm shadow-lg transition-all"
             >
               <motion.span
@@ -232,10 +250,10 @@ const Navbar = () => {
               >
                 Agenda una cita
               </motion.span>
-            </motion.button>
+            </motion.a>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Botón de menú móvil (se mantiene igual) */}
           <motion.button 
             className="md:hidden text-sky-700 focus:outline-none relative z-50"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -276,7 +294,7 @@ const Navbar = () => {
         </div>
       </motion.nav>
 
-      {/* Mobile Menu */}
+      {/* Menú móvil (se mantiene igual) */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div 
