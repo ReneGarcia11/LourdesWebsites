@@ -10,6 +10,7 @@ const Contact = () => {
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState('')
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -18,15 +19,44 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    setError('')
+    
+    // Validación mejorada
+    if (!formData.name.trim() || !formData.age) {
+      setError('Por favor completa todos los campos')
+      return
+    }
+
+    if (isNaN(formData.age) || formData.age < 1 || formData.age > 120) {
+      setError('Por favor ingresa una edad válida (1-120)')
+      return
+    }
+
     setIsSubmitting(true)
     
-    const whatsappMessage = `¡Hola! 👋\n\nMi nombre es *${formData.name.trim()}* y tengo *${formData.age} años*.\n\nMe gustaría agendar una cita. ¿Podrían ayudarme con los horarios disponibles? 💙`
+    // Mensaje mejor estructurado
+    const whatsappMessage = 
+      `¡Hola! 👋\n\n` +
+      `*Datos de contacto:*\n` +
+      `• Nombre: ${formData.name.trim()}\n` +
+      `• Edad: ${formData.age} años\n\n` +
+      `Me gustaría agendar una cita. ¿Podrían ayudarme con los horarios disponibles? 💙`
+    
+    // Codificación más robusta
     const encodedMessage = encodeURIComponent(whatsappMessage)
+      .replace(/'/g, "%27")
+      .replace(/\(/g, "%28")
+      .replace(/\)/g, "%29")
+      .replace(/\*/g, "%2A")
+      .replace(/~/g, "%7E")
+      .replace(/%20/g, "+")
+    
+    // Construcción de URL más confiable
     const whatsappUrl = `https://wa.me/523351107601?text=${encodedMessage}`
     
-    // Pequeño delay para mejor UX
+    // Abrir en la misma pestaña (mejor para móviles)
     setTimeout(() => {
-      window.open(whatsappUrl, '_blank')
+      window.location.href = whatsappUrl
       setIsSubmitting(false)
     }, 800)
   }
@@ -56,6 +86,16 @@ const Contact = () => {
             className="bg-white p-8 rounded-2xl shadow-xl border border-sky-100/70"
           >
             <form onSubmit={handleSubmit} className="space-y-6">
+              {error && (
+                <motion.div 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-3 bg-red-50 text-red-600 rounded-lg text-sm border border-red-100"
+                >
+                  {error}
+                </motion.div>
+              )}
+              
               <div className="space-y-1">
                 <label htmlFor="name" className="block text-sm font-medium text-sky-800/90 mb-1 items-center">
                   <FaUser className="mr-2 text-sky-500" />
@@ -66,6 +106,7 @@ const Contact = () => {
                   id="name"
                   name="name"
                   required
+                  minLength="3"
                   value={formData.name}
                   onChange={handleChange}
                   className="w-full px-4 py-3 rounded-xl border border-sky-200/80 focus:ring-2 focus:ring-sky-300 focus:border-sky-300 transition-all placeholder-sky-300/70"

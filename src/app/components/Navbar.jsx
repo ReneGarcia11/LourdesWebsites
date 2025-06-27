@@ -15,18 +15,51 @@ const Navbar = () => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10)
       
+      // Manejar el caso especial de la sección home
+      if (window.scrollY < 50) {
+        setActiveLink('#home')
+        return
+      }
+
       const sections = document.querySelectorAll('section')
+      let currentSection = '#home'
+      
       sections.forEach(section => {
         const sectionTop = section.offsetTop - 100
-        if (window.scrollY >= sectionTop) {
-          setActiveLink(`#${section.id}`)
+        const sectionBottom = sectionTop + section.offsetHeight
+        
+        if (window.scrollY >= sectionTop && window.scrollY < sectionBottom) {
+          currentSection = `#${section.id}`
         }
       })
+      
+      setActiveLink(currentSection)
     }
     
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  // Función para manejar el scroll suave
+  const scrollToSection = (e, sectionId) => {
+    e.preventDefault()
+    setActiveLink(sectionId)
+    setMobileMenuOpen(false)
+    
+    const element = document.querySelector(sectionId)
+    if (element) {
+      const offset = 80 // Ajusta este valor según el espacio que ocupa tu navbar
+      const bodyRect = document.body.getBoundingClientRect().top
+      const elementRect = element.getBoundingClientRect().top
+      const elementPosition = elementRect - bodyRect
+      const offsetPosition = elementPosition - offset
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
+    }
+  }
 
   const navItems = [
     { name: 'Inicio', href: '#home' },
@@ -34,9 +67,12 @@ const Navbar = () => {
     { name: 'Enfoque', href: '#objetives' },
     { name: 'Opiniones', href: '#opiniones' },
     { name: 'Contacto', href: '#contact' },
-  ]
+  ].map(item => ({
+    ...item,
+    onClick: (e) => scrollToSection(e, item.href)
+  }))
 
-  // Animaciones (se mantienen igual)
+  // Animaciones
   const itemVariants = {
     hidden: { opacity: 0, y: -10 },
     visible: (i) => ({
@@ -46,19 +82,19 @@ const Navbar = () => {
         delay: i * 0.1,
         duration: 0.5,
         type: 'spring',
-        stiffness: 100
+        stiffness: 120
       }
     }),
     hover: {
       scale: 1.05,
-      color: '#7dd3fc',
+      color: '#38bdf8',
       transition: { 
-        duration: 0.3,
+        duration: 0.2,
         ease: "easeOut"
       }
     },
     active: {
-      color: '#0ea5e9',
+      color: '#0284c7',
       scale: 1.05,
       transition: { duration: 0.2 }
     }
@@ -69,35 +105,34 @@ const Navbar = () => {
     animate: { 
       rotate: 360,
       transition: { 
-        duration: 15, 
+        duration: 20, 
         repeat: Infinity, 
         ease: "linear" 
       } 
     },
     hover: {
-      rotate: 180,
-      transition: { duration: 1 }
+      rotate: [0, 10, -10, 0],
+      transition: { duration: 0.6 }
     }
   }
 
   const buttonVariants = {
     initial: { 
       scale: 1,
-      boxShadow: "0 4px 14px rgba(14, 165, 233, 0.3)"
+      boxShadow: "0 4px 14px rgba(2, 132, 199, 0.25)"
     },
     hover: {
       scale: 1.05,
-      backgroundColor: '#0ea5e9',
-      color: '#fff',
-      boxShadow: "0 6px 20px rgba(14, 165, 233, 0.4)",
+      backgroundColor: '#0284c7',
+      boxShadow: "0 6px 20px rgba(2, 132, 199, 0.35)",
       transition: {
         duration: 0.3,
         ease: "easeOut"
       }
     },
     tap: {
-      scale: 0.95,
-      boxShadow: "0 2px 8px rgba(14, 165, 233, 0.2)"
+      scale: 0.98,
+      boxShadow: "0 2px 8px rgba(2, 132, 199, 0.2)"
     }
   }
 
@@ -105,7 +140,11 @@ const Navbar = () => {
     hidden: { 
       opacity: 0,
       height: 0,
-      y: -20
+      y: -20,
+      transition: {
+        duration: 0.3,
+        ease: "easeIn"
+      }
     },
     visible: {
       opacity: 1,
@@ -113,7 +152,9 @@ const Navbar = () => {
       y: 0,
       transition: {
         duration: 0.4,
-        ease: [0.04, 0.62, 0.23, 0.98]
+        ease: [0.04, 0.62, 0.23, 0.98],
+        when: "beforeChildren",
+        staggerChildren: 0.1
       }
     },
     exit: {
@@ -129,15 +170,14 @@ const Navbar = () => {
 
   const mobileItemVariants = {
     hidden: { opacity: 0, x: -30 },
-    visible: (i) => ({
+    visible: {
       opacity: 1,
       x: 0,
       transition: {
-        delay: i * 0.1 + 0.2,
-        duration: 0.5,
+        duration: 0.4,
         ease: "backOut"
       }
-    })
+    }
   }
 
   return (
@@ -146,39 +186,41 @@ const Navbar = () => {
         ref={ref}
         initial={{ opacity: 0, y: -20 }}
         animate={{ 
-          opacity: inView ? 1 : 0.9,
+          opacity: inView ? 1 : 0.95,
           y: 0,
-          backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.98)' : 'rgba(255, 255, 255, 0.95)',
-          backdropFilter: scrolled ? 'blur(12px)' : 'blur(8px)',
-          boxShadow: scrolled ? '0 4px 30px rgba(0, 0, 0, 0.1)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(224, 242, 254, 0.5)' : '1px solid transparent'
+          backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.98)' : 'rgba(255, 255, 255, 0.97)',
+          backdropFilter: scrolled ? 'blur(10px)' : 'blur(6px)',
+          boxShadow: scrolled ? '0 4px 20px rgba(0, 0, 0, 0.08)' : 'none',
+          borderBottom: scrolled ? '1px solid rgba(224, 242, 254, 0.3)' : '1px solid transparent'
         }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-        className="fixed w-full z-50 py-3 transition-all duration-300"
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="fixed w-full z-50 py-2 transition-all duration-300"
       >
         <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
-          {/* Logo mejorado */}
-          <Link href="#home" className="flex items-center group">
+          {/* Logo */}
+          <a 
+            href="#home" 
+            className="flex items-center group" 
+            onClick={(e) => scrollToSection(e, '#home')}
+          >
             <motion.div
               className="flex items-center space-x-3"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
             >
-              {/* Contenedor del logo con efecto sutil */}
               <div className="relative">
-                {/* Marco decorativo animado */}
                 <motion.div 
                   variants={logoVariants}
                   initial="initial"
                   animate="animate"
+                  whileHover="hover"
                   className="absolute -inset-2 border-2 border-sky-200/50 rounded-full group-hover:border-sky-300 transition-all"
                 />
                 
-                {/* Contenedor de la imagen */}
                 <motion.div 
-                  className="relative w-12 h-12 rounded-full overflow-hidden shadow-lg z-10 border-2 border-white bg-white"
-                  whileHover={{ rotate: 5, scale: 1.05 }}
-                  whileTap={{ rotate: -5, scale: 0.95 }}
+                  className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden shadow-md z-10 border-2 border-white bg-white"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   <Image 
                     src="/images/Logo1.png"
@@ -191,7 +233,6 @@ const Navbar = () => {
                 </motion.div>
               </div>
 
-              {/* Texto del nombre con animación mejorada */}
               <motion.div
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -206,10 +247,10 @@ const Navbar = () => {
                 </span>
               </motion.div>
             </motion.div>
-          </Link>
+          </a>
 
-          {/* Navegación desktop (se mantiene igual) */}
-          <div className="hidden md:flex items-center space-x-8">
+          {/* Navegación desktop */}
+          <div className="hidden md:flex items-center space-x-6">
             {navItems.map((item, i) => (
               <motion.div
                 key={item.name}
@@ -219,21 +260,24 @@ const Navbar = () => {
                 whileHover="hover"
                 variants={itemVariants}
               >
-                <Link
+                <a
                   href={item.href}
-                  className={`relative group text-sm uppercase tracking-wider font-medium ${activeLink === item.href ? 'text-sky-600' : 'text-sky-800'}`}
+                  onClick={item.onClick}
+                  className={`relative group text-sm uppercase tracking-wider font-medium px-1 ${
+                    activeLink === item.href ? 'text-sky-700' : 'text-sky-600 hover:text-sky-800'
+                  }`}
                 >
                   {item.name}
                   <motion.span 
-                    className="absolute bottom-0 left-0 w-full h-0.5 bg-sky-400"
+                    className="absolute bottom-0 left-0 w-full h-[2px] bg-sky-400 rounded-full"
                     initial={{ width: 0 }}
                     animate={{ 
                       width: activeLink === item.href ? '100%' : 0,
-                      backgroundColor: activeLink === item.href ? '#0ea5e9' : '#7dd3fc'
+                      backgroundColor: activeLink === item.href ? '#0284c7' : '#7dd3fc'
                     }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
                   />
-                </Link>
+                </a>
               </motion.div>
             ))}
             <motion.a
@@ -242,23 +286,20 @@ const Navbar = () => {
               whileHover="hover"
               whileTap="tap"
               href="#contact"
-              className="bg-sky-500 text-white px-6 py-2 rounded-full font-semibold text-sm shadow-lg transition-all"
+              onClick={(e) => scrollToSection(e, '#contact')}
+              className="bg-sky-600 text-white px-5 py-2 rounded-full font-semibold text-sm shadow-lg ml-2"
             >
-              <motion.span
-                whileHover={{ x: [0, 2, 0, -2, 0] }}
-                transition={{ duration: 0.5 }}
-              >
-                Agenda una cita
-              </motion.span>
+              Agenda una cita
             </motion.a>
           </div>
 
-          {/* Botón de menú móvil (se mantiene igual) */}
+          {/* Botón de menú móvil */}
           <motion.button 
-            className="md:hidden text-sky-700 focus:outline-none relative z-50"
+            className="md:hidden text-sky-700 focus:outline-none relative z-50 p-2"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
+            aria-label="Menú de navegación"
           >
             <motion.div
               animate={mobileMenuOpen ? "open" : "closed"}
@@ -266,7 +307,7 @@ const Navbar = () => {
               className="flex flex-col items-end space-y-1.5 w-6"
             >
               <motion.span
-                className="w-full h-0.5 bg-sky-600 rounded-full"
+                className="w-full h-[2px] bg-sky-600 rounded-full"
                 variants={{
                   closed: { width: "100%", y: 0, rotate: 0 },
                   open: { width: "100%", y: 6, rotate: 45 }
@@ -274,7 +315,7 @@ const Navbar = () => {
                 transition={{ duration: 0.2 }}
               />
               <motion.span
-                className="w-3/4 h-0.5 bg-sky-600 rounded-full"
+                className="w-3/4 h-[2px] bg-sky-600 rounded-full"
                 variants={{
                   closed: { opacity: 1, width: "75%" },
                   open: { opacity: 0, width: 0 }
@@ -282,7 +323,7 @@ const Navbar = () => {
                 transition={{ duration: 0.1 }}
               />
               <motion.span
-                className="w-full h-0.5 bg-sky-600 rounded-full"
+                className="w-full h-[2px] bg-sky-600 rounded-full"
                 variants={{
                   closed: { width: "100%", y: 0, rotate: 0 },
                   open: { width: "100%", y: -6, rotate: -45 }
@@ -294,7 +335,7 @@ const Navbar = () => {
         </div>
       </motion.nav>
 
-      {/* Menú móvil (se mantiene igual) */}
+      {/* Menú móvil */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div 
@@ -302,11 +343,10 @@ const Navbar = () => {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="fixed top-20 left-0 right-0 bg-white shadow-2xl z-40 md:hidden overflow-hidden"
-            style={{ originY: 0 }}
+            className="fixed top-16 left-0 right-0 bg-white shadow-xl z-40 md:hidden overflow-hidden border-t border-sky-100"
           >
-            <div className="container mx-auto px-4 py-4">
-              <div className="flex flex-col space-y-3">
+            <div className="container mx-auto px-4 py-3">
+              <div className="flex flex-col space-y-2">
                 {navItems.map((item, i) => (
                   <motion.div
                     key={item.name}
@@ -315,54 +355,46 @@ const Navbar = () => {
                     initial="hidden"
                     animate="visible"
                   >
-                    <Link
+                    <a
                       href={item.href}
+                      onClick={item.onClick}
                       className={`flex items-center py-3 px-4 rounded-lg transition-colors ${
                         activeLink === item.href 
-                          ? 'bg-sky-50 text-sky-600' 
-                          : 'text-sky-700 hover:bg-sky-50'
+                          ? 'bg-sky-100 text-sky-700 font-semibold' 
+                          : 'text-sky-600 hover:bg-sky-50'
                       }`}
-                      onClick={() => setMobileMenuOpen(false)}
                     >
                       <motion.div
-                        className="w-2 h-2 rounded-full mr-3"
+                        className="w-2 h-2 rounded-full mr-3 bg-sky-400"
                         animate={{
-                          backgroundColor: activeLink === item.href ? '#0ea5e9' : '#7dd3fc',
-                          scale: activeLink === item.href ? [1, 1.3, 1] : 1
+                          scale: activeLink === item.href ? [1, 1.2, 1] : 1
                         }}
                         transition={{ 
-                          duration: activeLink === item.href ? 0.8 : 0.3,
+                          duration: 0.6,
                           repeat: activeLink === item.href ? Infinity : 0
                         }}
                       />
-                      <motion.span 
-                        className="font-medium text-sm uppercase tracking-wider"
-                        whileHover={{ x: 5 }}
-                        transition={{ type: 'spring', stiffness: 300 }}
-                      >
+                      <span className="font-medium text-sm uppercase tracking-wider">
                         {item.name}
-                      </motion.span>
-                    </Link>
+                      </span>
+                    </a>
                   </motion.div>
                 ))}
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ 
-                    opacity: 1, 
-                    y: 0,
-                    transition: { delay: navItems.length * 0.1 + 0.2 }
-                  }}
-                  className="pt-2"
+                  variants={mobileItemVariants}
+                  className="pt-2 pb-1"
                 >
-                  <motion.button
+                  <motion.a
                     variants={buttonVariants}
                     initial="initial"
                     whileHover="hover"
                     whileTap="tap"
-                    className="bg-sky-500 text-white px-6 py-3 rounded-full font-semibold text-sm shadow-lg w-full"
+                    href="#contact"
+                    onClick={(e) => scrollToSection(e, '#contact')}
+                    className="block bg-sky-600 text-white px-6 py-3 rounded-full font-semibold text-sm shadow-lg text-center"
                   >
                     Agenda una cita
-                  </motion.button>
+                  </motion.a>
                 </motion.div>
               </div>
             </div>
