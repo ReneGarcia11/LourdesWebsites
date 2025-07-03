@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import Link from 'next/link'
 import Image from 'next/image'
 import { useInView } from 'react-intersection-observer'
 
@@ -15,7 +14,6 @@ const Navbar = () => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10)
       
-      // Manejar el caso especial de la sección home
       if (window.scrollY < 50) {
         setActiveLink('#home')
         return
@@ -40,24 +38,27 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Función para manejar el scroll suave
+  // Función mejorada para manejar el scroll suave
   const scrollToSection = (e, sectionId) => {
     e.preventDefault()
     setActiveLink(sectionId)
-    setMobileMenuOpen(false)
     
     const element = document.querySelector(sectionId)
     if (element) {
-      const offset = 80 // Ajusta este valor según el espacio que ocupa tu navbar
-      const bodyRect = document.body.getBoundingClientRect().top
-      const elementRect = element.getBoundingClientRect().top
-      const elementPosition = elementRect - bodyRect
-      const offsetPosition = elementPosition - offset
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
+      // Usar scrollIntoView con comportamiento suave
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
       })
+
+      // Ajustar manualmente el offset para el navbar
+      const offset = 80
+      window.scrollBy(0, -offset)
+
+      // Cerrar el menú móvil después de un pequeño retraso
+      setTimeout(() => {
+        setMobileMenuOpen(false)
+      }, 800)
     }
   }
 
@@ -357,7 +358,10 @@ const Navbar = () => {
                   >
                     <a
                       href={item.href}
-                      onClick={item.onClick}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        scrollToSection(e, item.href)
+                      }}
                       className={`flex items-center py-3 px-4 rounded-lg transition-colors ${
                         activeLink === item.href 
                           ? 'bg-sky-100 text-sky-700 font-semibold' 
