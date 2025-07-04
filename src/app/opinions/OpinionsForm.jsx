@@ -34,7 +34,12 @@ const OpinionForm = () => {
     setError(null)
 
     try {
-      const response = await fetch('/api/opinions', {
+      // URL absoluta para evitar problemas de CORS en producción
+      const apiUrl = process.env.NODE_ENV === 'development' 
+  ? '/api/opinions' 
+  : `https://${window.location.hostname.includes('opinions') ? 'crisisyduelo.com' : window.location.hostname}/api/opinions`;
+
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -43,7 +48,8 @@ const OpinionForm = () => {
       })
 
       if (!response.ok) {
-        throw new Error('Error al enviar la opinión')
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Error al enviar la opinión')
       }
 
       setSubmitSuccess(true)
@@ -135,21 +141,6 @@ const OpinionForm = () => {
                     required
                     className="w-full px-3 py-2 border border-sky-200 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent text-sky-900"
                     placeholder="Tu nombre"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="role" className="block text-sm font-medium text-sky-800 mb-1">
-                    ¿Cómo nos conociste? (Opcional)
-                  </label>
-                  <input
-                    type="text"
-                    id="role"
-                    name="role"
-                    value={formData.role}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-sky-200 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent text-sky-900"
-                    placeholder="Ej: Paciente, Cliente, etc."
                   />
                 </div>
 

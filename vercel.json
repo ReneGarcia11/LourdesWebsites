@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "http://opinions.crisisyduelo.com",
+      "destination": "https://opinions.crisisyduelo.com",
+      "permanent": true
+    }
+  ]
+}
