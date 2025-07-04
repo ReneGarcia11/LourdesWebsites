@@ -6,66 +6,35 @@ const Opinions = () => {
   const [activeTab, setActiveTab] = useState('all')
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
+  const [opinions, setOpinions] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const sliderRef = useRef(null)
   const intervalRef = useRef(null)
 
-  const opinions = [
-    {
-      id: 1,
-      name: "Ana Martínez",
-      role: "Paciente",
-      content: "La Dra. Ramírez me ayudó a superar una depresión severa. Su enfoque profesional y humano hizo toda la diferencia en mi proceso de recuperación.",
-      rating: 5,
-      date: "15/10/2023"
-    },
-    {
-      id: 2,
-      name: "Carlos Rodríguez",
-      role: "Paciente",
-      content: "Excelente profesional. Las herramientas que me proporcionó me han ayudado a manejar mi ansiedad efectivamente en mi día a día.",
-      rating: 5,
-      date: "02/11/2023"
-    },
-    {
-      id: 3,
-      name: "María González",
-      role: "Paciente",
-      content: "El acompañamiento durante mi proceso de duelo fue fundamental para poder superar esta etapa difícil. Recomiendo ampliamente sus servicios.",
-      rating: 4,
-      date: "20/09/2023"
-    },
-    {
-      id: 4,
-      name: "Juan Pérez",
-      role: "Paciente",
-      content: "Increíble atención y seguimiento. Me ayudó a superar mis problemas de autoestima y relaciones interpersonales.",
-      rating: 5,
-      date: "05/12/2023"
-    },
-    {
-      id: 5,
-      name: "Laura Sánchez",
-      role: "Paciente",
-      content: "Las sesiones fueron transformadoras. Aprendí herramientas prácticas que aplico en mi vida diaria con excelentes resultados.",
-      rating: 5,
-      date: "18/01/2024"
-    },
-    {
-      id: 6,
-      name: "Roberto Jiménez",
-      role: "Paciente",
-      content: "Profesionalismo y calidez humana. Me ayudó a manejar el estrés laboral de manera efectiva.",
-      rating: 4,
-      date: "22/02/2024"
+  // Fetch opinions from API
+  useEffect(() => {
+    const fetchOpinions = async () => {
+      try {
+        const response = await fetch('/api/opinions')
+        if (!response.ok) throw new Error('Failed to fetch opinions')
+        const data = await response.json()
+        setOpinions(data)
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
     }
-  ]
+    fetchOpinions()
+  }, [])
 
   const renderStars = (rating) => {
     return [...Array(5)].map((_, i) => (
       <div
         key={i}
         className={`w-4 h-4 ${i < rating ? 'text-yellow-400' : 'text-gray-300'}`}
-        aria-label={`Calificación ${i + 1} estrella${i !== 0 ? 's' : ''}`}
+        aria-label={`${i + 1} star${i !== 0 ? 's' : ''}`}
       >
         <svg fill="currentColor" viewBox="0 0 20 20" className="w-full h-full">
           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -78,7 +47,9 @@ const Opinions = () => {
     ? opinions 
     : opinions.filter(opinion => opinion.rating === parseInt(activeTab))
 
-  const averageRating = (opinions.reduce((sum, o) => sum + o.rating, 0) / opinions.length).toFixed(1)
+  const averageRating = opinions.length > 0 
+    ? (opinions.reduce((sum, o) => sum + o.rating, 0) / opinions.length).toFixed(1)
+    : '0.0'
 
   const groupedOpinions = useCallback(() => {
     const groups = []
@@ -90,6 +61,7 @@ const Opinions = () => {
 
   const groups = groupedOpinions()
 
+  // Auto-play slider effect
   useEffect(() => {
     const startAutoPlay = () => {
       if (groups.length <= 1) return
@@ -112,39 +84,57 @@ const Opinions = () => {
 
   const goToSlide = useCallback((index) => {
     setCurrentSlide(index)
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current)
-    }
-    intervalRef.current = setInterval(() => {
-      if (!isHovered) {
-        setCurrentSlide(prev => (prev + 1) % groups.length)
-      }
-    }, 5000)
+    resetInterval()
   }, [groups.length, isHovered])
 
   const goToPrevSlide = useCallback(() => {
     setCurrentSlide(prev => (prev - 1 + groups.length) % groups.length)
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current)
-    }
+    resetInterval()
+  }, [groups.length, isHovered])
+
+  const goToNextSlide = useCallback(() => {
+    setCurrentSlide(prev => (prev + 1) % groups.length)
+    resetInterval()
+  }, [groups.length, isHovered])
+
+  const resetInterval = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current)
     intervalRef.current = setInterval(() => {
-      if (!isHovered) {
+      if (!isHovered && groups.length > 1) {
         setCurrentSlide(prev => (prev + 1) % groups.length)
       }
     }, 5000)
   }, [groups.length, isHovered])
 
-  const goToNextSlide = useCallback(() => {
-    setCurrentSlide(prev => (prev + 1) % groups.length)
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current)
-    }
-    intervalRef.current = setInterval(() => {
-      if (!isHovered) {
-        setCurrentSlide(prev => (prev + 1) % groups.length)
-      }
-    }, 5000)
-  }, [groups.length, isHovered])
+  if (loading) {
+    return (
+      <section id="opiniones" className="py-12 bg-gradient-to-b from-white to-sky-50">
+        <div className="container mx-auto px-4 sm:px-6 text-center">
+          <p>Cargando opiniones...</p>
+        </div>
+      </section>
+    )
+  }
+
+  if (error) {
+    return (
+      <section id="opiniones" className="py-12 bg-gradient-to-b from-white to-sky-50">
+        <div className="container mx-auto px-4 sm:px-6 text-center text-red-500">
+          <p>Error: {error}</p>
+        </div>
+      </section>
+    )
+  }
+
+  if (opinions.length === 0) {
+    return (
+      <section id="opiniones" className="py-12 bg-gradient-to-b from-white to-sky-50">
+        <div className="container mx-auto px-4 sm:px-6 text-center">
+          <p>No hay opiniones disponibles</p>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section id="opiniones" className="py-12 bg-gradient-to-b from-white to-sky-50">
@@ -292,11 +282,11 @@ const Opinions = () => {
           className="bg-white/80 backdrop-blur-sm p-3 rounded-lg border border-sky-100 text-center max-w-md mx-auto"
         >
           <div className="flex justify-center items-center gap-1.5 mb-1">
-            {renderStars(Math.round(averageRating))}
+            {renderStars(Math.round(parseFloat(averageRating)))}
             <span className="text-base font-bold text-sky-900">{averageRating}/5</span>
           </div>
           <p className="text-xs text-sky-700">
-            Basado en {opinions.length} testimonios verificados
+            Basado en {opinions.length} testimonio{opinions.length !== 1 ? 's' : ''} verificado{opinions.length !== 1 ? 's' : ''}
           </p>
         </motion.div>
       </div>

@@ -1,7 +1,7 @@
 'use client'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { FaInstagram, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa'
+import { FaInstagram, FaPhone, FaMapMarkerAlt } from 'react-icons/fa'
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
@@ -22,26 +22,26 @@ const Footer = () => {
               Psicóloga clínica especializada en intervención en crisis y tanatología, comprometida con tu bienestar emocional.
             </p>
             <div className="flex space-x-4">
-              <motion.a 
+              <motion.a
                 whileHover={{ y: -3 }}
-                href="#" 
+                href="#"
                 className="text-gray-300 hover:text-white transition-colors"
               >
-                
+
               </motion.a>
-              <motion.a 
+              <motion.a
                 whileHover={{ y: -3 }}
-                href="#" 
+                href="#"
                 className="text-gray-300 hover:text-white transition-colors"
               >
                 <FaInstagram size={20} />
               </motion.a>
-              <motion.a 
+              <motion.a
                 whileHover={{ y: -3 }}
-                href="#" 
+                href="#"
                 className="text-gray-300 hover:text-white transition-colors"
               >
-                
+
               </motion.a>
             </div>
           </motion.div>
@@ -94,7 +94,7 @@ const Footer = () => {
               <li>
                 <span className="text-gray-300">Terapia Individual</span>
               </li>
-              
+
             </ul>
           </motion.div>
 
@@ -109,11 +109,7 @@ const Footer = () => {
             <ul className="space-y-4">
               <li className="flex items-start">
                 <FaPhone className="text-gray-300 mt-1 mr-3 flex-shrink-0" />
-                <span className="text-gray-300">+52 55 1234 5678</span>
-              </li>
-              <li className="flex items-start">
-                <FaEnvelope className="text-gray-300 mt-1 mr-3 flex-shrink-0" />
-                <span className="text-gray-300">contacto@lourdesramirez.com</span>
+                <span className="text-gray-300">+52 33 3955 5642</span>
               </li>
               <li className="flex items-start">
                 <FaMapMarkerAlt className="text-gray-300 mt-1 mr-3 flex-shrink-0" />
