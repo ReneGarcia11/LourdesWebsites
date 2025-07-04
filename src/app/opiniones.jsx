@@ -1,5 +1,5 @@
 import React from 'react';
-import OpinionsForm from '../subdominio/OpinionsForm';
+import OpinionsForm from './subdominio/OpinionsForm';
 
 export default function OpinionesPage() {
   return (
