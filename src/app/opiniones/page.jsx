@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import OpinionForm from '../../components/OpinionForm' // o donde esté tu componente
+import OpinionForm from '../../components/OpinionsForm' // o donde esté tu componente
 
 export default function OpinionesPage() {
   return (
