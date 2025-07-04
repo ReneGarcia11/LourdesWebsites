@@ -1,34 +1,67 @@
-// app/api/opinions/route.js
-import { db } from '@vercel/postgres';
+import { Pool } from 'pg';
 
+// Configuración de la conexión PostgreSQL
+const pool = new Pool({
+  connectionString: process.env.POSTGRES_URL + (process.env.POSTGRES_URL.includes('?') ? '&' : '?') + 'sslmode=require',
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+// GET: Obtener todas las opiniones
 export async function GET() {
   try {
-    const client = await db.connect();
-    const { rows } = await client.sql`
+    const client = await pool.connect();
+    
+    // Verificar si la tabla existe
+    const tableExists = await client.query(`
+      SELECT EXISTS (
+        SELECT FROM pg_tables 
+        WHERE schemaname = 'public' AND tablename = 'opinions'
+      );
+    `);
+
+    if (!tableExists.rows[0].exists) {
+      // Crear tabla si no existe
+      await client.query(`
+        CREATE TABLE opinions (
+          id SERIAL PRIMARY KEY,
+          name VARCHAR(100) NOT NULL,
+          role VARCHAR(100),
+          content TEXT NOT NULL,
+          rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
+          date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+      `);
+      
+    }
+
+    // Obtener opiniones
+    const result = await client.query(`
       SELECT 
         id, 
         name, 
         role, 
         content, 
         rating, 
-        TO_CHAR(date, 'DD/MM/YYYY') as date
-      FROM opinions
+        to_char(date, 'YYYY-MM-DD') as date 
+      FROM opinions 
       ORDER BY date DESC
-    `;
+    `);
+    
     client.release();
-
-    // Configuración CORS para permitir el subdominio
-    const headers = new Headers();
-    headers.set('Content-Type', 'application/json');
-    headers.set('Access-Control-Allow-Origin', 'https://opinions.crisisyduelo.com');
-    headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    headers.set('Access-Control-Allow-Headers', 'Content-Type');
-
-    return new Response(JSON.stringify(rows), {
-      headers
+    
+    return new Response(JSON.stringify(result.rows), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-store' // Para datos dinámicos
+      }
     });
+    
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
+    console.error('Database error:', error);
+    return new Response(JSON.stringify({ error: 'Error al obtener opiniones' }), {
       status: 500,
       headers: {
         'Content-Type': 'application/json'
@@ -37,54 +70,42 @@ export async function GET() {
   }
 }
 
+// POST: Crear nueva opinión
 export async function POST(request) {
   try {
-    const client = await db.connect();
     const { name, role, content, rating } = await request.json();
     
-    // Validación básica de datos
+    // Validación básica
     if (!name || !content || rating < 1 || rating > 5) {
-      throw new Error('Datos de entrada inválidos');
+      return new Response(JSON.stringify({ error: 'Datos inválidos' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
-    await client.sql`
-      INSERT INTO opinions (name, role, content, rating, date)
-      VALUES (${name}, ${role || null}, ${content}, ${rating}, NOW())
-    `;
+    const client = await pool.connect();
+    const result = await client.query(
+      'INSERT INTO opinions (name, role, content, rating) VALUES ($1, $2, $3, $4) RETURNING *',
+      [name, role, content, rating]
+    );
+    
     client.release();
-
-    // Configuración CORS
-    const headers = new Headers();
-    headers.set('Content-Type', 'application/json');
-    headers.set('Access-Control-Allow-Origin', 'https://opinions.crisisyduelo.com');
-    headers.set('Access-Control-Allow-Methods', 'POST');
-    headers.set('Access-Control-Allow-Headers', 'Content-Type');
-
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200,
-      headers
-    });
-  } catch (error) {
-    return new Response(JSON.stringify({ 
-      error: error.message || 'Error al procesar la opinión'
-    }), {
-      status: 500,
+    
+    return new Response(JSON.stringify(result.rows[0]), {
+      status: 201,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://opinions.crisisyduelo.com'
+        'Location': `/api/opinions/${result.rows[0].id}`
+      }
+    });
+    
+  } catch (error) {
+    console.error('Database error:', error);
+    return new Response(JSON.stringify({ error: 'Error al crear opinión' }), {
+      status: 500,
+      headers: {
+        'Content-Type': 'application/json'
       }
     });
   }
-}
-
-// Necesario para CORS preflight
-export async function OPTIONS() {
-  const headers = new Headers();
-  headers.set('Access-Control-Allow-Origin', 'https://opinions.crisisyduelo.com');
-  headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  headers.set('Access-Control-Allow-Headers', 'Content-Type');
-  
-  return new Response(null, {
-    headers
-  });
 }
