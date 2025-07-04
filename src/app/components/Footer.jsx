@@ -126,16 +126,8 @@ const Footer = () => {
         <div className="border-t border-gray-700 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
-              © {currentYear} Dra. Lourdes Ramírez. Todos los derechos reservados.
+              © {currentYear} Psic. Lourdes Ramírez. Todos los derechos reservados.
             </p>
-            <div className="flex space-x-6">
-              <Link href="/politica-privacidad" className="text-gray-400 hover:text-white text-sm transition-colors">
-                Política de Privacidad
-              </Link>
-              <Link href="/terminos-servicio" className="text-gray-400 hover:text-white text-sm transition-colors">
-                Términos de Servicio
-              </Link>
-            </div>
           </div>
         </div>
       </div>

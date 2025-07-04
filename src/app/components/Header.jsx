@@ -26,7 +26,7 @@ const Header = () => {
       duration: 15 + Math.random() * 10,
       delay: Math.random() * 3
     })))
-  }, []) 
+  }, [])
 
   const textVariants = {
     hidden: { opacity: 0, y: 40 },
@@ -55,24 +55,30 @@ const Header = () => {
 
   // Animación especial para la letra K
   const kAnimation = {
-    hidden: { opacity: 0, scale: 0.5 },
+    hidden: { opacity: 0, scale: 0.5, rotate: -30 },
     visible: {
       opacity: 1,
       scale: 1,
+      rotate: 0,
       transition: {
         type: 'spring',
-        stiffness: 300,
-        damping: 10,
-        delay: 0.5
+        stiffness: 500,
+        damping: 15,
+        delay: 0.7
       }
     },
     pulse: {
-      scale: [1, 1.2, 1],
+      scale: [1, 1.3, 1],
       color: ['#0284c7', '#0ea5e9', '#0284c7'],
+      textShadow: [
+        '0 0 0px rgba(2, 132, 199, 0)',
+        '0 0 10px rgba(14, 165, 233, 0.5)',
+        '0 0 0px rgba(2, 132, 199, 0)'
+      ],
       transition: {
-        duration: 2,
+        duration: 1.5,
         repeat: Infinity,
-        repeatDelay: 5,
+        repeatDelay: 4,
         ease: 'easeInOut'
       }
     }
@@ -95,7 +101,7 @@ const Header = () => {
       {/* Componente del patrón animado */}
       <AnimatedPattern />
 
-      {/* Elementos decorativos - Ahora con valores consistentes */}
+      {/* Elementos decorativos */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {randomValues.map((values, i) => (
           <motion.div
@@ -143,7 +149,57 @@ const Header = () => {
               variants={textVariants}
               className="text-xl sm:text-2xl md:text-3xl font-light text-sky-700"
             >
-              Psicóloga Klínica y Tanatóloga
+              Psicóloga 
+              
+              <motion.span 
+  initial="hidden"
+  animate={['visible', 'hover']}
+  whileHover="hover"
+  variants={{
+    hidden: {
+      opacity: 0,
+      scale: 0.5,
+      rotate: -45,
+      y: 20,
+      color: "#0284c7"
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      rotate: 0,
+      y: 0,
+      color: "#0284c7",
+      transition: {
+        type: "spring",
+        stiffness: 500,
+        damping: 15,
+        delay: 0.7
+      }
+    },
+    hover: {
+      scale: [1, 1.4, 1.2],
+      rotate: [0, 10, -5, 0],
+      color: ["#0284c7", "#0ea5e9", "#7dd3fc", "#0284c7"],
+      textShadow: [
+        "0 0 0px rgba(2, 132, 199, 0)",
+        "0 0 8px rgba(14, 165, 233, 0.7)",
+        "0 0 4px rgba(125, 211, 252, 0.5)",
+        "0 0 0px rgba(2, 132, 199, 0)"
+      ],
+      transition: {
+        duration: 1.2,
+        repeat: Infinity,
+        repeatDelay: 2,
+        ease: "easeInOut",
+        times: [0, 0.3, 0.7, 1]
+      }
+    }
+  }}
+  className="inline-block mx-1 font-bold"
+>
+  K
+</motion.span>
+              línica
             </motion.p>
           </motion.div>
 
@@ -151,19 +207,9 @@ const Header = () => {
             variants={textVariants}
             className="inline-block mb-12"
           >
-            <div className="bg-white/80 backdrop-blur-md rounded-xl p-6 shadow-lg border border-sky-100/50">
+            <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-sky-100/50">
               <p className="text-sky-800 text-lg md:text-xl font-medium">
-                "
-                <motion.span 
-                  initial="hidden"
-                  animate={['visible', 'pulse']}
-                  variants={kAnimation}
-                  className="inline-block"
-                  style={{ color: '#0284c7' }}
-                >
-                  K
-                </motion.span>
-                linica Integral e intervención en crisis"
+                Clínica Integral, Tanatología e Intervención en Crisis
               </p>
             </div>
           </motion.div>

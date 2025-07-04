@@ -13,7 +13,7 @@ const services = [
     icon: "🌿"
   },
   {
-    title: "Oncología Psicológica",
+    title: "Psicológica Oncología",
     description: "Acompañamiento especializado para pacientes oncológicos.",
     icon: "🎗️"
   },
