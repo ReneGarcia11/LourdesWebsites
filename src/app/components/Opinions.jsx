@@ -185,7 +185,7 @@ const Opinions = () => {
                   : 'bg-white text-sky-700 hover:bg-sky-50'
               }`}
             >
-              {rating} estrellas
+              {rating} Estrellas
             </button>
           ))}
         </motion.div>
