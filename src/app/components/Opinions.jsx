@@ -146,7 +146,7 @@ const Opinions = () => {
           transition={{ duration: 0.4 }}
           className="text-center mb-8"
         >
-          <h2 className="text-2xl md:text-3xl font-bold text-sky-900 mb-2">Testimonios de Pacientes</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-sky-900 mb-2">Opiniones de Pacientes</h2>
           <p className="text-base text-sky-700 max-w-2xl mx-auto">
             Experiencias reales que demuestran la calidad de nuestro servicio
           </p>
@@ -286,7 +286,7 @@ const Opinions = () => {
             <span className="text-base font-bold text-sky-900">{averageRating}/5</span>
           </div>
           <p className="text-xs text-sky-700">
-            Basado en {opinions.length} testimonio{opinions.length !== 1 ? 's' : ''} verificado{opinions.length !== 1 ? 's' : ''}
+            Basado en {opinions.length} Opiniones {opinions.length !== 1 ? 's' : ''} verificado{opinions.length !== 1 ? 's' : ''}
           </p>
         </motion.div>
       </div>
