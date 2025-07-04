@@ -1,7 +1,7 @@
 'use client'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { FaInstagram, FaPhone, FaMapMarkerAlt } from 'react-icons/fa'
+import { FaPhone, FaMapMarkerAlt } from 'react-icons/fa'
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
@@ -34,7 +34,6 @@ const Footer = () => {
                 href="#"
                 className="text-gray-300 hover:text-white transition-colors"
               >
-                <FaInstagram size={20} />
               </motion.a>
               <motion.a
                 whileHover={{ y: -3 }}
