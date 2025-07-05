@@ -122,8 +122,7 @@ const Header = () => {
                 whileHover="hover"
                 variants={kAnimation}
                 className="inline-block mx-1 font-bold"
-              >
-                K
+              > K
               </motion.span>línica
             </motion.p>
           </motion.div>
