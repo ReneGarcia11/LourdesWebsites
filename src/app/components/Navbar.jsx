@@ -119,7 +119,7 @@ const Navbar = () => {
         className="fixed w-full z-50 py-2 transition-all duration-300"
       >
         <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
-          {/* Logo */}
+          
           <a 
             href="#home" 
             onClick={(e) => scrollToSection(e, '#home')}
