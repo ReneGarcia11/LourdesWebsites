@@ -4,9 +4,9 @@ const nextConfig = {
   reactStrictMode: true,
   trailingSlash: false,
   output: 'standalone',
-  productionBrowserSourceMaps: false, // Mejor rendimiento
+  productionBrowserSourceMaps: false,
 
-  // 2. Seguridad Mejorada
+  // 2. Seguridad
   async headers() {
     return [
       {
@@ -15,50 +15,45 @@ const nextConfig = {
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'Permissions-Policy', value: 'geolocation=(), microphone=()' }, // Protege privacidad
+          { key: 'Permissions-Policy', value: 'geolocation=(), microphone=()' },
         ],
       },
     ];
   },
 
-  // 3. Imágenes + WebVitals
+  // 3. Imágenes
   images: {
-    domains: ['crisisyduelo.com', 'www.crisisyduelo.com'], // Incluye versión www
+    domains: ['crisisyduelo.com', 'www.crisisyduelo.com'],
     minimumCacheTTL: 86400,
-    formats: ['image/avif', 'image/webp'], // AVIF es 30% más ligero que WebP
+    formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
   },
 
-  // 4. Redirecciones y Rewrites
+  // 4. Redirecciones (Versión corregida)
   async redirects() {
     return [
       {
-        source: '/http:/(.*)',
-        destination: '/https:/$1',
-        permanent: true,
-      },
-      {
         source: '/servicios/terapia-duelo',
         destination: '/servicios#duelo',
-        permanent: true, // 308 para SEO
+        permanent: true,
+      },
+      // Redirección HTTPS alternativa (opcional)
+      {
+        source: '/',
+        has: [
+          {
+            type: 'host',
+            value: 'http://crisisyduelo.com',
+          },
+        ],
+        destination: 'https://crisisyduelo.com',
+        permanent: true,
       },
     ];
   },
 
-  // 5. Features Experimentales (Next 14+)
-  experimental: {
-    sitemap: true, // Genera sitemap automático
-    optimizeCss: true, // Mejor CLS
-    nextScriptWorkers: true, // Mejor rendimiento
-  },
-
-  // 6. Configuración para Vercel
-  eslint: {
-    ignoreDuringBuilds: true, // Acelera builds
-  },
-  typescript: {
-    ignoreBuildErrors: true, // Solo para producción
-  },
+  // 5. Generación de Sitemap (Nueva forma en Next.js 15)
+  generateSitemaps: true, // Reemplaza experimental.sitemap
 };
 
 export default nextConfig;
