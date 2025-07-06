@@ -89,13 +89,16 @@ const ContactForm = () => {
         viewport={{ once: true }}
         transition={{ delay: 0.2 }}
         className="bg-white p-8 rounded-2xl shadow-xl border border-sky-100/70"
+        itemScope
+        itemType="http://schema.org/ContactPage"
       >
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6" aria-label="Formulario para agendar cita psicológica">
           {error && (
             <motion.div 
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               className="p-3 bg-red-50 text-red-600 rounded-lg text-sm border border-red-100"
+              role="alert"
             >
               {error}
             </motion.div>
@@ -116,6 +119,8 @@ const ContactForm = () => {
               onChange={handleChange}
               className="w-full px-4 py-3 rounded-xl border border-sky-200/80 focus:ring-2 focus:ring-sky-300 focus:border-sky-300 transition-all placeholder-sky-300/70"
               placeholder="Ej: María González"
+              aria-label="Ingresa tu nombre completo para agendar cita"
+              itemProp="name"
             />
           </div>
 
@@ -135,6 +140,8 @@ const ContactForm = () => {
               onChange={handleChange}
               className="w-full px-4 py-3 rounded-xl border border-sky-200/80 focus:ring-2 focus:ring-sky-300 focus:border-sky-300 transition-all placeholder-sky-300/70"
               placeholder="Ej: 28"
+              aria-label="Ingresa tu edad para agendar cita psicológica"
+              itemProp="age"
             />
           </div>
 
@@ -148,6 +155,8 @@ const ContactForm = () => {
                 ? 'bg-sky-400 cursor-not-allowed' 
                 : 'bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-600 hover:to-sky-700'
             }`}
+            aria-label="Continuar al WhatsApp para agendar cita psicológica"
+            itemProp="potentialAction"
           >
             {isSubmitting ? (
               <span className="text-white">Cargando...</span>
@@ -161,9 +170,13 @@ const ContactForm = () => {
         </form>
 
         <div className="mt-6 text-center">
-          <p className="text-xs text-sky-500/80">
+          <p className="text-xs text-sky-500/80" itemProp="description">
             Al continuar, serás redirigido a WhatsApp para completar tu cita
           </p>
+          {/* Texto oculto para SEO */}
+          <div className="sr-only">
+            <meta itemProp="keywords" content="agendar cita psicóloga Guadalajara, consulta psicológica Zapopan, terapia online Jalisco, whatsapp para psicología" />
+          </div>
         </div>
       </motion.div>
 
@@ -173,11 +186,19 @@ const ContactForm = () => {
         viewport={{ once: true }}
         transition={{ delay: 0.4 }}
         className="mt-8 bg-sky-50/50 p-6 rounded-2xl border border-sky-100 text-center"
+        itemScope
+        itemType="http://schema.org/FAQPage"
       >
-        <h3 className="text-lg font-medium text-sky-800 mb-2">¿Por qué solo estos datos?</h3>
-        <p className="text-sm text-sky-700/90">
+        <h3 className="text-lg font-medium text-sky-800 mb-2" itemProp="name">
+          ¿Por qué solo estos datos?
+        </h3>
+        <p className="text-sm text-sky-700/90" itemProp="acceptedAnswer">
           Queremos hacerlo simple. El resto de información necesaria la recopilaremos directamente por WhatsApp para una experiencia más personalizada.
         </p>
+        {/* Texto oculto para SEO */}
+        <div className="sr-only">
+          <meta itemProp="keywords" content="proceso de cita psicológica, información necesaria para terapia, consulta inicial psicólogo" />
+        </div>
       </motion.div>
     </div>
   )
@@ -185,7 +206,12 @@ const ContactForm = () => {
 
 const Contact = () => {
   return (
-    <section id="contact" className="py-16 md:py-24 bg-gradient-to-b from-sky-50 to-white">
+    <section 
+      id="contact" 
+      className="py-16 md:py-24 bg-gradient-to-b from-sky-50 to-white"
+      itemScope
+      itemType="http://schema.org/ProfessionalService"
+    >
       <div className="container mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -194,10 +220,24 @@ const Contact = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-sky-900 mb-4">Agenda tu cita</h2>
-          <p className="text-lg text-sky-700/90 max-w-2xl mx-auto">
+          <h2 
+            className="text-4xl md:text-5xl font-bold text-sky-900 mb-4"
+            itemProp="name"
+            title="Agenda cita con psicóloga en Guadalajara y Zapopan"
+          >
+            Agenda tu cita
+          </h2>
+          <p 
+            className="text-lg text-sky-700/90 max-w-2xl mx-auto"
+            itemProp="description"
+            aria-label="Formulario simple para agendar terapia psicológica presencial o virtual"
+          >
             Solo necesitamos dos datos para preparar tu atención personalizada
           </p>
+          {/* Texto oculto para SEO */}
+          <div className="sr-only">
+            <meta itemProp="keywords" content="psicóloga en Guadalajara, consulta psicológica Zapopan, terapia online Jalisco, primera cita psicólogo, horarios disponibles psicología" />
+          </div>
         </motion.div>
 
         <GoogleReCaptchaProvider

@@ -8,6 +8,50 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeLink, setActiveLink] = useState('#home')
 
+  // Datos SEO
+  const seoData = {
+    keywords: [
+      "psicóloga en Guadalajara",
+      "tanatología Zapopan",
+      "terapia de duelo Jalisco",
+      "consulta psicológica online",
+      "psicóloga especializada en crisis",
+      "acompañamiento emocional profesional"
+    ],
+    navItems: [
+      { 
+        name: 'Inicio', 
+        href: '#home',
+        title: "Psicóloga clínica en Guadalajara - Página principal",
+        keywords: "inicio terapia emocional, psicóloga especializada"
+      },
+      { 
+        name: 'Servicios', 
+        href: '#services',
+        title: "Servicios de psicología en Zapopan",
+        keywords: "terapia duelo, acompañamiento emocional, psicología oncológica"
+      },
+      { 
+        name: 'Enfoque', 
+        href: '#objetives',
+        title: "Método terapéutico especializado",
+        keywords: "enfoque psicológico, terapia basada en evidencia"
+      },
+      { 
+        name: 'Opiniones', 
+        href: '#opiniones',
+        title: "Experiencias de pacientes",
+        keywords: "testimonios psicología, resultados reales terapia"
+      },
+      { 
+        name: 'Contacto', 
+        href: '#contact',
+        title: "Agendar cita con psicóloga",
+        keywords: "consulta psicológica online, whatsapp para terapia"
+      }
+    ]
+  }
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10)
@@ -36,7 +80,6 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Función mejorada para scroll que funciona en móviles
   const scrollToSection = (e, sectionId) => {
     e.preventDefault()
     setActiveLink(sectionId)
@@ -55,15 +98,7 @@ const Navbar = () => {
     }
   }
 
-  const navItems = [
-    { name: 'Inicio', href: '#home' },
-    { name: 'Servicios', href: '#services' },
-    { name: 'Enfoque', href: '#objetives' },
-    { name: 'Opiniones', href: '#opiniones' },
-    { name: 'Contacto', href: '#contact' },
-  ]
-
-  // Animaciones
+  // Animaciones (se mantienen igual)
   const itemVariants = {
     hidden: { opacity: 0, y: -10 },
     visible: (i) => ({
@@ -117,6 +152,9 @@ const Navbar = () => {
           boxShadow: scrolled ? '0 4px 20px rgba(0, 0, 0, 0.08)' : 'none'
         }}
         className="fixed w-full z-50 py-2 transition-all duration-300"
+        itemScope
+        itemType="http://schema.org/SiteNavigationElement"
+        aria-label="Navegación principal"
       >
         <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
           
@@ -124,26 +162,33 @@ const Navbar = () => {
             href="#home" 
             onClick={(e) => scrollToSection(e, '#home')}
             className="flex items-center"
+            itemProp="url"
           >
             <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-white bg-white">
               <Image 
                 src="/images/Logo1.png"
-                alt="Logo Psicóloga Lourdes"
+                alt="Logo Psicóloga Lourdes Ramírez - Especialista en tanatología y crisis emocionales en Guadalajara"
                 width={48}
                 height={48}
                 className="object-cover"
                 priority
+                itemProp="image"
+                title="Consultorio de Psicología Clínica"
               />
             </div>
             <div className="ml-3">
-              <p className="text-sky-800 font-bold text-sm sm:text-base">Psic. Lourdes</p>
-              <p className="text-xs text-sky-500 hidden sm:block">Psicología Clínica</p>
+              <p className="text-sky-800 font-bold text-sm sm:text-base" itemProp="name">Psic. Lourdes</p>
+              <p className="text-xs text-sky-500 hidden sm:block" itemProp="description">Psicología Clínica</p>
+            </div>
+            {/* Texto oculto para SEO */}
+            <div className="sr-only">
+              <meta itemProp="keywords" content={seoData.keywords.join(', ')} />
             </div>
           </a>
 
           {/* Navegación desktop */}
           <div className="hidden md:flex items-center space-x-6">
-            {navItems.map((item, i) => (
+            {seoData.navItems.map((item, i) => (
               <a
                 key={item.href}
                 href={item.href}
@@ -151,6 +196,9 @@ const Navbar = () => {
                 className={`relative py-2 text-sm uppercase font-medium ${
                   activeLink === item.href ? 'text-sky-700' : 'text-sky-600 hover:text-sky-800'
                 }`}
+                title={item.title}
+                aria-label={`Ir a sección ${item.name}`}
+                itemProp="url"
               >
                 {item.name}
                 {activeLink === item.href && (
@@ -160,12 +208,19 @@ const Navbar = () => {
                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                   />
                 )}
+                {/* Metadatos ocultos por ítem */}
+                <div className="sr-only">
+                  <meta itemProp="keywords" content={item.keywords} />
+                </div>
               </a>
             ))}
             <a
               href="#contact"
               onClick={(e) => scrollToSection(e, '#contact')}
               className="bg-sky-600 hover:bg-sky-700 text-white px-5 py-2 rounded-full font-semibold text-sm shadow-md ml-2 transition-all"
+              aria-label="Agendar cita psicológica"
+              title="Solicitar primera consulta"
+              itemProp="potentialAction"
             >
               Agenda una cita
             </a>
@@ -175,7 +230,9 @@ const Navbar = () => {
           <button 
             className="md:hidden text-sky-700 p-2"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Menú"
+            aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu"
           >
             {mobileMenuOpen ? (
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -198,9 +255,10 @@ const Navbar = () => {
               exit="exit"
               variants={mobileMenuVariants}
               className="md:hidden bg-white shadow-lg overflow-hidden"
+              id="mobile-menu"
             >
               <div className="container mx-auto px-4 py-2">
-                {navItems.map((item) => (
+                {seoData.navItems.map((item) => (
                   <motion.div
                     key={item.href}
                     variants={mobileItemVariants}
@@ -214,6 +272,8 @@ const Navbar = () => {
                           ? 'text-sky-700 font-semibold' 
                           : 'text-sky-600 hover:text-sky-800'
                       }`}
+                      aria-label={`Ir a ${item.name}`}
+                      title={item.title}
                     >
                       {item.name}
                     </a>
@@ -224,6 +284,8 @@ const Navbar = () => {
                     href="#contact"
                     onClick={(e) => scrollToSection(e, '#contact')}
                     className="block bg-sky-600 hover:bg-sky-700 text-white text-center py-3 rounded-full font-semibold text-sm shadow-md transition-all"
+                    aria-label="Agendar cita desde móvil"
+                    title="Contactar psicóloga"
                   >
                     Agenda una cita
                   </a>

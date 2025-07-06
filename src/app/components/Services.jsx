@@ -10,7 +10,19 @@ const Services = () => {
       modalities: [
         { type: "Presencial" },
         { type: "Virtual" }
-      ]
+      ],
+      // Metadatos SEO (no afectan visualmente)
+      seoData: {
+        title: "Terapia para duelo en Guadalajara | Psicóloga especializada en pérdidas | Zapopan",
+        keywords: [
+          "tanatología Guadalajara",
+          "psicóloga para duelo Zapopan",
+          "manejo de pérdidas emocionales",
+          "acompañamiento en duelo Jalisco",
+          "terapia para duelos complicados",
+          "duelo anticipado Guadalajara"
+        ]
+      }
     },
     {
       title: "Acompañamiento Integral",
@@ -19,7 +31,17 @@ const Services = () => {
       modalities: [
         { type: "Presencial" },
         { type: "Virtual"}
-      ]
+      ],
+      seoData: {
+        title: "Acompañamiento psicológico en enfermedades terminales | Guadalajara y Zapopan",
+        keywords: [
+          "cuidados paliativos psicológicos",
+          "apoyo emocional en cáncer",
+          "psicóloga para enfermedades crónicas",
+          "acompañamiento en terminalidad",
+          "terapia para pacientes graves Jalisco"
+        ]
+      }
     },
     {
       title: "Psicológia Oncología",
@@ -28,7 +50,17 @@ const Services = () => {
       modalities: [
         { type: "Presencial" },
         { type: "Virtual" }
-      ]
+      ],
+      seoData: {
+        title: "Psicóloga oncológica en Guadalajara | Apoyo emocional para cáncer | Zapopan",
+        keywords: [
+          "psicología en oncología",
+          "terapia para pacientes con cáncer",
+          "manejo emocional del cáncer",
+          "apoyo a familiares de enfermos oncológicos",
+          "psicóloga para quimioterapia Jalisco"
+        ]
+      }
     },
     {
       title: "Terapia Individual",
@@ -37,7 +69,17 @@ const Services = () => {
       modalities: [
         { type: "Presencial" },
         { type: "Virtual" }
-      ]
+      ],
+      seoData: {
+        title: "Terapia psicológica individual en Guadalajara | Psicóloga clínica | Zapopan",
+        keywords: [
+          "psicoterapia individual",
+          "terapia para ansiedad y depresión",
+          "crisis existencial",
+          "crecimiento personal con terapia",
+          "psicóloga para adultos Jalisco"
+        ]
+      }
     }
   ]
 
@@ -59,7 +101,13 @@ const Services = () => {
   }
 
   return (
-    <section id="servicios" className="py-16 bg-gradient-to-b from-white to-sky-50">
+    <section 
+      id="servicios" 
+      className="py-16 bg-gradient-to-b from-white to-sky-50"
+      itemScope
+      itemType="http://schema.org/Service"
+      aria-label="Servicios profesionales de psicología clínica en Guadalajara y Zapopan"
+    >
       <div className="container mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -68,19 +116,35 @@ const Services = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-sky-900 mb-3">Nuestros Servicios</h2>
-          <p className="text-lg text-sky-700 max-w-2xl mx-auto mb-2">
+          <h2 
+            className="text-3xl md:text-4xl font-bold text-sky-900 mb-3"
+            itemProp="name"
+            title="Servicios de psicología especializada en Guadalajara y Zapopan"
+          >
+            Nuestros Servicios
+          </h2>
+          <p 
+            className="text-lg text-sky-700 max-w-2xl mx-auto mb-2"
+            itemProp="description"
+            aria-label="Terapias profesionales para duelo, acompañamiento en enfermedades, oncología y bienestar emocional"
+          >
             Enfoque profesional con resultados comprobados
           </p>
           <div className="flex justify-center gap-4 mt-4">
-            <span className="inline-flex items-center bg-sky-100 text-sky-800 px-3 py-1 rounded-full text-sm">
+            <span 
+              className="inline-flex items-center bg-sky-100 text-sky-800 px-3 py-1 rounded-full text-sm"
+              aria-label="Sesiones presenciales disponibles en Zapopan"
+            >
               <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
               Sesiones Presenciales
             </span>
-            <span className="inline-flex items-center bg-sky-100 text-sky-800 px-3 py-1 rounded-full text-sm">
+            <span 
+              className="inline-flex items-center bg-sky-100 text-sky-800 px-3 py-1 rounded-full text-sm"
+              aria-label="Terapia psicológica en línea disponible para todo Jalisco"
+            >
               <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
               </svg>
@@ -100,11 +164,34 @@ const Services = () => {
               transition={{ delay: index * 0.1 }}
               whileHover={{ y: -5 }}
               className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-all border border-sky-100/50 flex flex-col h-full"
+              itemScope
+              itemType="http://schema.org/ProfessionalService"
+              aria-labelledby={`service-title-${index}`}
             >
-              <div className="text-4xl mb-3">{service.icon}</div>
-              <h3 className="text-xl font-semibold text-sky-800 mb-2">{service.title}</h3>
-              <p className="text-sky-600 mb-4 flex-grow">{service.description}</p>
+              {/* Contenido visual intacto */}
+              <div className="text-4xl mb-3" aria-hidden="true">{service.icon}</div>
+              <h3 
+                id={`service-title-${index}`}
+                className="text-xl font-semibold text-sky-800 mb-2"
+                itemProp="name"
+                title={service.seoData.title}
+              >
+                {service.title}
+              </h3>
+              <p 
+                className="text-sky-600 mb-4 flex-grow"
+                itemProp="description"
+              >
+                {service.description}
+              </p>
               
+              {/* Metadatos ocultos para SEO */}
+              <div className="sr-only">
+                <meta itemProp="keywords" content={service.seoData.keywords.join(', ')} />
+                <span itemProp="serviceType">{service.title}</span>
+                <span itemProp="areaServed">Guadalajara, Zapopan, Jalisco</span>
+              </div>
+
               <motion.div 
                 variants={modalityVariants}
                 className="space-y-3 pt-3 border-t border-sky-100"
@@ -114,6 +201,9 @@ const Services = () => {
                     key={i}
                     variants={itemVariants}
                     className="flex items-start"
+                    itemProp="availableChannel"
+                    itemScope
+                    itemType="http://schema.org/ServiceChannel"
                   >
                     <div className={`flex-shrink-0 mt-0.5 mr-2 ${modality.type === 'Presencial' ? 'text-sky-600' : 'text-sky-400'}`}>
                       {modality.type === 'Presencial' ? (
@@ -128,8 +218,9 @@ const Services = () => {
                       )}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-sky-900">{modality.type}</p>
-                      <p className="text-xs text-sky-600">{modality.details}</p>
+                      <p className="text-sm font-medium text-sky-900">
+                        {modality.type}
+                      </p>
                     </div>
                   </motion.div>
                 ))}

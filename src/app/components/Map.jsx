@@ -10,7 +10,15 @@ const Map = () => {
     address: "Av. Miguel Angel 14, Zapopan",
     googleMapsLink: "https://maps.app.goo.gl/jXZdjqTew6xgrPqMA",
     exactIframeUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1319.736302946811!2d-103.42485128086965!3d20.678610679226484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8428af8dd124be45%3A0x6912a015055fe2d!2sCl%C3%ADnica%20BriZuela!5e0!3m2!1ses!2smx!4v1751582885858!5m2!1ses!2smx",
-    coordinates: "20.67902, -103.4243"
+    coordinates: "20.67902, -103.4243",
+    // Metadatos SEO
+    seoKeywords: [
+      "consultorio psicológico Zapopan",
+      "clínica de psicología Guadalajara",
+      "ubicación psicóloga Real Vallarta",
+      "dirección exacta psicólogo Jalisco",
+      "cómo llegar a terapia psicológica"
+    ]
   }
 
   // Función para generar enlaces de direcciones exactos
@@ -19,7 +27,12 @@ const Map = () => {
   }
 
   return (
-    <section className="py-16 bg-gradient-to-b from-sky-50 to-white" id="ubicacion">
+    <section 
+      className="py-16 bg-gradient-to-b from-sky-50 to-white" 
+      id="ubicacion"
+      itemScope
+      itemType="http://schema.org/MedicalClinic"
+    >
       <div className="container mx-auto px-4 sm:px-6">
         {/* Encabezado con detalles */}
         <motion.div
@@ -31,9 +44,26 @@ const Map = () => {
         >
           <div className="inline-flex items-center justify-center mb-4">
             <FaMapMarkerAlt className="text-sky-600 text-3xl mr-3" />
-            <h2 className="text-3xl md:text-4xl font-bold text-sky-900">Ubicación Exacta</h2>
+            <h2 
+              className="text-3xl md:text-4xl font-bold text-sky-900"
+              itemProp="name"
+              title="Ubicación exacta del consultorio psicológico en Zapopan"
+            >
+              Ubicación Exacta
+            </h2>
           </div>
-          <p className="text-sky-700 text-lg max-w-2xl mx-auto">{clinicaBrizuela.info}</p>
+          <p 
+            className="text-sky-700 text-lg max-w-2xl mx-auto"
+            itemProp="address"
+            aria-label="Dirección de la Clínica BriZuela en Real Vallarta, Zapopan"
+          >
+            {clinicaBrizuela.info}
+          </p>
+          {/* Texto oculto para SEO */}
+          <div className="sr-only">
+            <meta itemProp="keywords" content={clinicaBrizuela.seoKeywords.join(', ')} />
+            <meta itemProp="geo" content={`${clinicaBrizuela.coordinates}`} />
+          </div>
         </motion.div>
 
         {/* Contenedor principal */}
@@ -45,12 +75,23 @@ const Map = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
             className="bg-white p-6 rounded-xl shadow-lg border border-sky-100"
+            itemScope
+            itemType="http://schema.org/Place"
           >
             <h3 className="text-xl font-bold text-sky-900 mb-4 flex items-center">
               <FaMapMarkerAlt className="mr-2 text-sky-600" />
-              {clinicaBrizuela.name}
+              <span itemProp="name">{clinicaBrizuela.name}</span>
             </h3>
-            <p className="text-gray-700 mb-6">{clinicaBrizuela.address}</p>
+            <p 
+              className="text-gray-700 mb-6"
+              itemProp="address"
+              itemScope
+              itemType="http://schema.org/PostalAddress"
+            >
+              <span itemProp="streetAddress">{clinicaBrizuela.address}</span>, 
+              <span itemProp="addressLocality"> Zapopan</span>, 
+              <span itemProp="addressRegion"> Jalisco</span>
+            </p>
             
             {/* Botón principal */}
             <a
@@ -58,6 +99,8 @@ const Map = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center bg-sky-600 hover:bg-sky-700 text-white px-4 py-3 rounded-lg font-medium transition-all shadow-md mb-4"
+              aria-label="Abrir ubicación en Google Maps"
+              itemProp="hasMap"
             >
               <FaDirections className="mr-2" />
               Abrir en Maps
@@ -70,6 +113,7 @@ const Map = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-2 rounded-lg text-sm transition-all"
+                aria-label="Cómo llegar en auto a la clínica psicológica"
               >
                 <FaCar className="mr-1" />
                 En auto
@@ -79,6 +123,7 @@ const Map = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-2 rounded-lg text-sm transition-all"
+                aria-label="Ruta a pie hacia el consultorio psicológico"
               >
                 <FaWalking className="mr-1" />
                 A pie
@@ -103,7 +148,8 @@ const Map = () => {
               loading="lazy"
               className="absolute inset-0"
               referrerPolicy="no-referrer-when-downgrade"
-              aria-label="Mapa exacto de Clínica BriZuela"
+              aria-label="Mapa interactivo de ubicación de Clínica BriZuela en Zapopan"
+              title="Ubicación exacta del consultorio psicológico en Real Vallarta"
             ></iframe>
             
             {/* Botón flotante */}
@@ -115,6 +161,7 @@ const Map = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="inline-flex items-center bg-white text-sky-700 px-4 py-2 rounded-lg shadow-lg hover:bg-sky-50 transition-all border border-sky-200 font-medium"
+                aria-label="Instrucciones para llegar al consultorio"
               >
                 <FaDirections className="mr-2" />
                 <span>Cómo llegar</span>

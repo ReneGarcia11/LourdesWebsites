@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /_next/static/ # Bloquea archivos internos
+Disallow: /admin/ # Si tienes panel admin
+
+# Sitemaps (recomendado)
+Sitemap: https://crisisyduelo.com/sitemap.xml

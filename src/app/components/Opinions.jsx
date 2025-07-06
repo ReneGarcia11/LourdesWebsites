@@ -1,8 +1,53 @@
 'use client'
 import { motion } from 'framer-motion'
 import { useState, useEffect, useRef, useCallback } from 'react'
+import Head from 'next/head'
 
 const Opinions = () => {
+  // 1. KEYWORDS PARA SEO (INVISIBLES)
+  const seoKeywords = `
+    Psicología clínica Guadalajara, Psicóloga especializada en duelo Zapopan,
+    Acompañamiento psicológico Jalisco, Terapia emocional Guadalajara,
+    Apoyo psicológico profesional Zapopan, Salud mental y emocional Jalisco,
+    Tanatología y duelo Guadalajara, Psicóloga tanatológica Zapopan,
+    Acompañamiento en duelo Jalisco, Manejo del duelo por pérdida Guadalajara,
+    Terapia para el duelo Zapopan, Apoyo emocional en pérdidas significativas Jalisco,
+    Duelo anticipado Guadalajara, Aceptación de una pérdida Zapopan,
+    Psicóloga intervención en crisis Jalisco, Manejo de crisis emocional Guadalajara,
+    Apoyo psicológico en emergencias Zapopan, Intervención psicológica en trauma Jalisco,
+    Primeros auxilios psicológicos Guadalajara, Psicoterapia breve en crisis Zapopan,
+    Apoyo post evento traumático Jalisco, Acompañamiento psicológico individual Guadalajara,
+    Apoyo emocional profesional Zapopan, Escucha activa y contención emocional Jalisco,
+    Terapia para afrontar pérdidas Guadalajara, Apoyo en procesos difíciles Zapopan,
+    Terapia en momentos de cambio Jalisco, Búsqueda de sentido de la vida Guadalajara,
+    Psicología existencial Zapopan, Apoyo en crisis existenciales Jalisco,
+    Crecimiento personal con apoyo terapéutico Guadalajara, Psicoterapia centrada en el sentido Zapopan,
+    Psicóloga en Guadalajara, Tanatóloga en Zapopan, Psicoterapia en línea México,
+    Apoyo psicológico en crisis CDMX, Cuidados paliativos Guadalajara,
+    Cuidados paliativos psicológicos Zapopan, Apoyo emocional en Zapopan,
+    Apoyo emocional en pacientes terminales Jalisco, Manejo emocional de pacientes Guadalajara,
+    Ansiedad en adolescentes Zapopan, Depresión en adolescentes Jalisco,
+    Ansiedad en adultos Guadalajara, Acompañamiento emocional para adolescentes Zapopan,
+    Psicología en enfermedades crónicas Jalisco, Apoyo psicológico en enfermedades graves Guadalajara,
+    Psicóloga especializada en salud Zapopan, Psicología clínica en pacientes con diagnóstico complejo Jalisco,
+    Terapia emocional en enfermedades físicas Guadalajara, Acompañamiento psicológico en cáncer Zapopan,
+    Apoyo emocional para pacientes con cáncer Jalisco, Psicología oncológica Guadalajara,
+    Terapia para enfrentar el cáncer Zapopan, Psicóloga para pacientes con diagnóstico de cáncer Jalisco,
+    Apoyo psicológico en tratamiento oncológico Guadalajara, Psicología en cuidados paliativos Zapopan,
+    Intervención emocional en oncología Jalisco, Manejo del miedo y la ansiedad en el cáncer Guadalajara,
+    Acompañamiento en cáncer terminal Zapopan, Acompañamiento psicológico para adultos mayores Jalisco,
+    Psicóloga especializada en geriatría Guadalajara, Apoyo emocional en la vejez Zapopan,
+    Psicología del envejecimiento Jalisco, Terapia para adultos mayores Guadalajara,
+    Salud mental en la tercera edad Zapopan, Prevención del deterioro emocional en adultos mayores Jalisco,
+    Manejo del duelo en personas mayores Guadalajara, Apoyo psicológico para cuidadores de adultos mayores Zapopan,
+    Apoyo emocional a familiares de pacientes crónicos Jalisco, Contención psicológica a cuidadores Guadalajara,
+    Cuidando al cuidador del paciente crónico o terminal Zapopan,
+    Acompañamiento a familias en proceso de enfermedad Jalisco,
+    Terapia para cuidadores de pacientes con cáncer Guadalajara,
+    Orientación psicológica para familias de adultos mayores Zapopan
+  `.replace(/\s+/g, ' ').trim();
+
+  // 2. ESTADOS ORIGINALES (SIN MODIFICAR)
   const [activeTab, setActiveTab] = useState('all')
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
@@ -12,7 +57,7 @@ const Opinions = () => {
   const sliderRef = useRef(null)
   const intervalRef = useRef(null)
 
-  // Fetch opinions from API
+  // 3. FETCH DE OPINIONES (ORIGINAL)
   useEffect(() => {
     const fetchOpinions = async () => {
       try {
@@ -29,6 +74,7 @@ const Opinions = () => {
     fetchOpinions()
   }, [])
 
+  // 4. RENDERIZADO DE ESTRELLAS (ORIGINAL)
   const renderStars = (rating) => {
     return [...Array(5)].map((_, i) => (
       <div
@@ -43,6 +89,7 @@ const Opinions = () => {
     ))
   }
 
+  // 5. FILTRADO Y CÁLCULOS (ORIGINAL)
   const filteredOpinions = activeTab === 'all' 
     ? opinions 
     : opinions.filter(opinion => opinion.rating === parseInt(activeTab))
@@ -51,6 +98,7 @@ const Opinions = () => {
     ? (opinions.reduce((sum, o) => sum + o.rating, 0) / opinions.length).toFixed(1)
     : '0.0'
 
+  // 6. AGRUPAMIENTO DE OPINIONES (ORIGINAL)
   const groupedOpinions = useCallback(() => {
     const groups = []
     for (let i = 0; i < filteredOpinions.length; i += 3) {
@@ -61,7 +109,7 @@ const Opinions = () => {
 
   const groups = groupedOpinions()
 
-  // Auto-play slider effect
+  // 7. AUTOPLAY SLIDER (ORIGINAL)
   useEffect(() => {
     const startAutoPlay = () => {
       if (groups.length <= 1) return
@@ -82,6 +130,7 @@ const Opinions = () => {
     }
   }, [groups.length, isHovered])
 
+  // 8. FUNCIONES DE NAVEGACIÓN (ORIGINAL)
   const goToSlide = useCallback((index) => {
     setCurrentSlide(index)
     resetInterval()
@@ -106,6 +155,7 @@ const Opinions = () => {
     }, 5000)
   }, [groups.length, isHovered])
 
+  // 9. ESTADOS DE CARGA (ORIGINAL)
   if (loading) {
     return (
       <section id="opiniones" className="py-12 bg-gradient-to-b from-white to-sky-50">
@@ -136,161 +186,169 @@ const Opinions = () => {
     )
   }
 
+  // 10. RENDER PRINCIPAL (ORIGINAL CON META TAGS AÑADIDOS)
   return (
-    <section id="opiniones" className="py-12 bg-gradient-to-b from-white to-sky-50">
-      <div className="container mx-auto px-4 sm:px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-          className="text-center mb-8"
-        >
-          <h2 className="text-2xl md:text-3xl font-bold text-sky-900 mb-2">Opiniones de Pacientes</h2>
-          <p className="text-base text-sky-700 max-w-2xl mx-auto">
-            Experiencias reales que demuestran la calidad de nuestro servicio
-          </p>
-        </motion.div>
+    <>
+      <Head>
+        <meta name="keywords" content={seoKeywords} />
+        <meta name="description" content="Opiniones reales de pacientes sobre nuestros servicios psicológicos profesionales en Guadalajara, Zapopan y todo Jalisco" />
+      </Head>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-2 mb-6"
-        >
-          <button
-            onClick={() => {
-              setActiveTab('all')
-              setCurrentSlide(0)
-            }}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-              activeTab === 'all' 
-                ? 'bg-sky-600 text-white shadow-md' 
-                : 'bg-white text-sky-700 hover:bg-sky-50'
-            }`}
+      <section id="opiniones" className="py-12 bg-gradient-to-b from-white to-sky-50">
+        <div className="container mx-auto px-4 sm:px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="text-center mb-8"
           >
-            Todas
-          </button>
-          {[5, 4].map(rating => (
+            <h2 className="text-2xl md:text-3xl font-bold text-sky-900 mb-2">Opiniones de Pacientes</h2>
+            <p className="text-base text-sky-700 max-w-2xl mx-auto">
+              Experiencias reales que demuestran la calidad de nuestro servicio
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="flex flex-wrap justify-center gap-2 mb-6"
+          >
             <button
-              key={rating}
               onClick={() => {
-                setActiveTab(rating.toString())
+                setActiveTab('all')
                 setCurrentSlide(0)
               }}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1 ${
-                activeTab === rating.toString() 
+              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                activeTab === 'all' 
                   ? 'bg-sky-600 text-white shadow-md' 
                   : 'bg-white text-sky-700 hover:bg-sky-50'
               }`}
             >
-              {rating} Estrellas
+              Todas
             </button>
-          ))}
-        </motion.div>
-
-        <div 
-          className="relative overflow-hidden mb-6"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          <div 
-            ref={sliderRef}
-            className="flex transition-transform duration-500 ease-in-out"
-            style={{ 
-              transform: `translateX(-${currentSlide * 100}%)`,
-              width: `${groups.length * 100}%`
-            }}
-          >
-            {groups.map((group, groupIndex) => (
-              <div key={groupIndex} className="w-full flex-shrink-0 px-2">
-                <div className="grid md:grid-cols-3 gap-4">
-                  {group.map((opinion) => (
-                    <motion.div
-                      key={opinion.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.3 }}
-                      className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-sky-100/50 h-full flex flex-col"
-                    >
-                      <div className="flex gap-1 mb-2">
-                        {renderStars(opinion.rating)}
-                      </div>
-                      <blockquote className="text-sky-800 text-sm italic mb-3 flex-grow">
-                        "{opinion.content}"
-                      </blockquote>
-                      <div className="flex justify-between items-center mt-auto">
-                        <div>
-                          <p className="font-medium text-sky-900 text-sm">{opinion.name}</p>
-                          <p className="text-xs text-sky-600">{opinion.role}</p>
-                        </div>
-                        <span className="text-xs text-sky-500">{opinion.date}</span>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
+            {[5, 4].map(rating => (
+              <button
+                key={rating}
+                onClick={() => {
+                  setActiveTab(rating.toString())
+                  setCurrentSlide(0)
+                }}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1 ${
+                  activeTab === rating.toString() 
+                    ? 'bg-sky-600 text-white shadow-md' 
+                    : 'bg-white text-sky-700 hover:bg-sky-50'
+                }`}
+              >
+                {rating} Estrellas
+              </button>
             ))}
-          </div>
+          </motion.div>
 
-          {groups.length > 1 && (
-            <>
-              <button
-                onClick={goToPrevSlide}
-                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-1.5 rounded-full shadow-md z-10"
-                aria-label="Anterior"
-              >
-                <svg className="w-4 h-4 text-sky-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-              <button
-                onClick={goToNextSlide}
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-1.5 rounded-full shadow-md z-10"
-                aria-label="Siguiente"
-              >
-                <svg className="w-4 h-4 text-sky-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </>
-          )}
-
-          {groups.length > 1 && (
-            <div className="flex justify-center mt-4 gap-1.5">
-              {groups.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  className={`w-2 h-2 rounded-full transition-all ${
-                    index === currentSlide ? 'bg-sky-600 w-4' : 'bg-sky-300'
-                  }`}
-                  aria-label={`Ir a slide ${index + 1}`}
-                />
+          <div 
+            className="relative overflow-hidden mb-6"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <div 
+              ref={sliderRef}
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ 
+                transform: `translateX(-${currentSlide * 100}%)`,
+                width: `${groups.length * 100}%`
+              }}
+            >
+              {groups.map((group, groupIndex) => (
+                <div key={groupIndex} className="w-full flex-shrink-0 px-2">
+                  <div className="grid md:grid-cols-3 gap-4">
+                    {group.map((opinion) => (
+                      <motion.div
+                        key={opinion.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.3 }}
+                        className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-sky-100/50 h-full flex flex-col"
+                      >
+                        <div className="flex gap-1 mb-2">
+                          {renderStars(opinion.rating)}
+                        </div>
+                        <blockquote className="text-sky-800 text-sm italic mb-3 flex-grow">
+                          "{opinion.content}"
+                        </blockquote>
+                        <div className="flex justify-between items-center mt-auto">
+                          <div>
+                            <p className="font-medium text-sky-900 text-sm">{opinion.name}</p>
+                            <p className="text-xs text-sky-600">{opinion.role}</p>
+                          </div>
+                          <span className="text-xs text-sky-500">{opinion.date}</span>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
-          )}
-        </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
-          className="bg-white/80 backdrop-blur-sm p-3 rounded-lg border border-sky-100 text-center max-w-md mx-auto"
-        >
-          <div className="flex justify-center items-center gap-1.5 mb-1">
-            {renderStars(Math.round(parseFloat(averageRating)))}
-            <span className="text-base font-bold text-sky-900">{averageRating}/5</span>
+            {groups.length > 1 && (
+              <>
+                <button
+                  onClick={goToPrevSlide}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-1.5 rounded-full shadow-md z-10"
+                  aria-label="Anterior"
+                >
+                  <svg className="w-4 h-4 text-sky-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <button
+                  onClick={goToNextSlide}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-1.5 rounded-full shadow-md z-10"
+                  aria-label="Siguiente"
+                >
+                  <svg className="w-4 h-4 text-sky-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </>
+            )}
+
+            {groups.length > 1 && (
+              <div className="flex justify-center mt-4 gap-1.5">
+                {groups.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToSlide(index)}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      index === currentSlide ? 'bg-sky-600 w-4' : 'bg-sky-300'
+                    }`}
+                    aria-label={`Ir a slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+            )}
           </div>
-          <p className="text-xs text-sky-700">
-            Basado en {opinions.length} Opiniones {opinions.length !== 1 ? 's' : ''} verificado{opinions.length !== 1 ? 's' : ''}
-          </p>
-        </motion.div>
-      </div>
-    </section>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+            className="bg-white/80 backdrop-blur-sm p-3 rounded-lg border border-sky-100 text-center max-w-md mx-auto"
+          >
+            <div className="flex justify-center items-center gap-1.5 mb-1">
+              {renderStars(Math.round(parseFloat(averageRating)))}
+              <span className="text-base font-bold text-sky-900">{averageRating}/5</span>
+            </div>
+            <p className="text-xs text-sky-700">
+              Basado en {opinions.length} Opiniones {opinions.length !== 1 ? 's' : ''} verificado{opinions.length !== 1 ? 's' : ''}
+            </p>
+          </motion.div>
+        </div>
+      </section>
+    </>
   )
 }
 

@@ -7,18 +7,18 @@ import Image from 'next/image'
 const Header = () => {
   const [showTooltip, setShowTooltip] = useState(false)
   const containerRef = useRef(null)
-  
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end start']
   })
-  
+
   const yBg = useTransform(scrollYProgress, [0, 1], ['0%', '20%'])
 
   // Animación mejorada para la letra K
   const kAnimation = {
-    hidden: { 
-      opacity: 0, 
+    hidden: {
+      opacity: 0,
       scale: 0.8,
       y: 10,
       color: "#0284c7"
@@ -54,10 +54,10 @@ const Header = () => {
 
   const textVariants = {
     hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: { 
+      transition: {
         type: 'spring',
         damping: 10,
         stiffness: 100
@@ -77,19 +77,19 @@ const Header = () => {
   }
 
   return (
-    <header 
+    <header
       ref={containerRef}
       id="home"
       className="relative h-screen overflow-hidden flex items-center bg-white"
     >
       {/* Fondo con efecto parallax */}
       <div className="absolute inset-0 overflow-hidden">
-        <motion.div 
+        <motion.div
           className="absolute inset-0 bg-white"
           style={{ y: yBg }}
         />
       </div>
-      
+
       {/* Componente del patrón animado - Asegurando visibilidad */}
       <div className="absolute inset-0 z-0">
         <AnimatedPattern opacity={0.15} speed={0.5} />
@@ -106,17 +106,27 @@ const Header = () => {
             <motion.h1
               variants={textVariants}
               className="text-4xl sm:text-5xl md:text-6xl font-bold text-sky-900 leading-tight"
+              title="Psicóloga Clínica en Guadalajara | Especialista en Duelo y Tanatología | Zapopan, Jalisco"
+              aria-label="Psic. Lourdes Ramírez - Psicología clínica, acompañamiento psicológico y terapia emocional para manejo de duelo, crisis y salud mental"
             >
-              <span className="block bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-sky-800">
+              <span
+                className="block bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-sky-800"
+                aria-hidden="true" // Oculta el texto duplicado para lectores de pantalla
+              >
                 Psic. Lourdes Ramírez
               </span>
+              {/* Texto oculto solo para SEO */}
+              <span className="sr-only">
+                Psicóloga especializada en duelo, tanatología y acompañamiento psicológico en Guadalajara, Zapopan y Jalisco.
+                Servicios de terapia emocional, apoyo psicológico profesional y manejo de crisis.
+              </span>
             </motion.h1>
-            
+
             <motion.p
               variants={textVariants}
               className="text-xl sm:text-2xl md:text-3xl font-light text-sky-700"
             >
-              Psicóloga <motion.span 
+              Psicóloga <motion.span
                 initial="hidden"
                 animate={['visible', 'hover']}
                 whileHover="hover"
@@ -138,7 +148,7 @@ const Header = () => {
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             variants={textVariants}
             className="flex flex-col sm:flex-row justify-center gap-4"
           >
@@ -150,7 +160,7 @@ const Header = () => {
             >
               Agenda tu primera cita
             </motion.a>
-            
+
             <motion.a
               whileHover={{ y: -3 }}
               whileTap={{ scale: 0.98 }}
@@ -177,13 +187,13 @@ const Header = () => {
 
       {/* Afiliación profesional con tooltip */}
       <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-30 overflow-visible">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2, type: 'spring' }}
           className="relative"
         >
-          <div 
+          <div
             className="relative"
             onMouseEnter={() => setShowTooltip(true)}
             onMouseLeave={() => setShowTooltip(false)}
@@ -192,7 +202,7 @@ const Header = () => {
               <span className="text-sky-700">Miembro de </span>
               <span className="font-semibold text-sky-800">APACP</span>
             </div>
-            
+
             {showTooltip && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -201,7 +211,7 @@ const Header = () => {
               >
                 <div className="flex flex-col items-center">
                   <div className="mb-3 w-20 h-20 relative">
-                    <Image 
+                    <Image
                       src="/images/apacp-logo.png"
                       alt="Logo APACP"
                       fill
