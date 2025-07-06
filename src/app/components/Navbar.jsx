@@ -27,7 +27,7 @@ const Navbar = () => {
       },
       { 
         name: 'Servicios', 
-        href: '#services',
+        href: '#servicios',
         title: "Servicios de psicología en Zapopan",
         keywords: "terapia duelo, acompañamiento emocional, psicología oncológica"
       },

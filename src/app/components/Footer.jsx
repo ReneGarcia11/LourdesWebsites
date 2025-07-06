@@ -88,7 +88,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link 
-                  href="#services" 
+                  href="#servicios" 
                   className="text-gray-300 hover:text-white transition-colors"
                   aria-label="Ver servicios psicológicos"
                   itemProp="makesOffer"
