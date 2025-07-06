@@ -1,17 +1,22 @@
 import { NextResponse } from 'next/server'
 
 export function middleware(request) {
-  const host = request.headers.get('host') || ''
+  const hostname = request.headers.get('host') || ''
 
-  if (host.startsWith('opinions.')) {
+  // Evita reescribir si es el dominio principal
+  if (hostname.startsWith('opinions.')) {
     const url = request.nextUrl.clone()
-    url.pathname = '/subdominio'
-    return NextResponse.rewrite(url)
+
+    // Cambia solo si el path es raíz, por ejemplo '/'
+    if (url.pathname === '/') {
+      url.pathname = '/subdominio'
+      return NextResponse.rewrite(url)
+    }
   }
 
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/', '/((?!_next|_static|favicon.ico|.*\\..*).*)'],
+  matcher: ['/'], // Solo aplica el middleware en la raíz
 }
