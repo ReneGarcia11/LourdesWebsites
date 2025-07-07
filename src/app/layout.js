@@ -13,11 +13,10 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "Psicóloga Lourdes Ramírez",
-  description: "Terapia profesional en duelo y crisis emocionales",
+  description: "Psicóloga Klínica, Tanatología e Intervención en Crisis",
   icons: {
     icon: "/logo-psicologa.ico?v=3",  // ?v=3 para forzar actualización
     shortcut: "/logo-psicologa.ico",
-    apple: "/apple-touch-icon.png",
   },
 };
 
