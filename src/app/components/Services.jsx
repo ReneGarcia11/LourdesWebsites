@@ -44,7 +44,7 @@ const Services = () => {
       }
     },
     {
-      title: "Psicológia Oncología",
+      title: "Psicología Oncológica",
       description: "Acompañamiento especializado para pacientes oncológicos.",
       icon: "🎗️",
       modalities: [
