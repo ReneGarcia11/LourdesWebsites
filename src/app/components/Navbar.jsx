@@ -21,31 +21,31 @@ const Navbar = () => {
     navItems: [
       { 
         name: 'Inicio', 
-        href: 'home',
+        href: '#home',
         title: "Psicóloga clínica en Guadalajara - Página principal",
         keywords: "inicio terapia emocional, psicóloga especializada"
       },
       { 
         name: 'Servicios', 
-        href: 'servicios',
+        href: '#servicios',
         title: "Servicios de psicología en Zapopan",
         keywords: "terapia duelo, acompañamiento emocional, psicología oncológica"
       },
       { 
         name: 'Enfoque', 
-        href: 'objetives',
+        href: '#objetives',
         title: "Método terapéutico especializado",
         keywords: "enfoque psicológico, terapia basada en evidencia"
       },
       { 
         name: 'Opiniones', 
-        href: 'opiniones',
+        href: '#opiniones',
         title: "Experiencias de pacientes",
         keywords: "testimonios psicología, resultados reales terapia"
       },
       { 
         name: 'Contacto', 
-        href: 'contact',
+        href: '#contact',
         title: "Agendar cita con psicóloga",
         keywords: "consulta psicológica online, whatsapp para terapia"
       }
@@ -81,22 +81,26 @@ const Navbar = () => {
   }, [])
 
   const scrollToSection = (e, sectionId) => {
-    e.preventDefault()
-    setActiveLink(sectionId)
-    setMobileMenuOpen(false)
+  e.preventDefault();
+  setActiveLink(sectionId);
+  setMobileMenuOpen(false);
 
-    const element = document.querySelector(sectionId)
-    if (element) {
-      const offset = window.innerWidth < 768 ? 100 : 80
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
-      const offsetPosition = elementPosition - offset
+  const element = document.querySelector(sectionId);
+  if (element) {
+    // Ajuste importante para móviles
+    const headerOffset = window.innerWidth < 768 ? 120 : 80;
+    const elementPosition = element.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
+    // Solución alternativa más confiable
+    setTimeout(() => {
       window.scrollTo({
         top: offsetPosition,
         behavior: 'smooth'
-      })
-    }
+      });
+    }, 100); // Pequeño delay para asegurar el cierre del menú
   }
+};
 
   // Animaciones (se mantienen igual)
   const itemVariants = {
