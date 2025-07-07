@@ -9,7 +9,7 @@ import Map from './components/Map'
 
 export const metadata = {
   title: "Psic. Lourdes Ramírez",
-  description: "Terapia profesional en duelo y crisis emocionales",
+  description: "Psicóloga Klínica, Tanatología e Intervención en Crisis",
 };
 
 export default function Home() {
