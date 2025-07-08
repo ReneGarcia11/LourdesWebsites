@@ -22,7 +22,7 @@ const ContactForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
-    
+
     // Validación mejorada
     if (!formData.name.trim() || !formData.age) {
       setError('Por favor completa todos los campos')
@@ -40,11 +40,11 @@ const ContactForm = () => {
     }
 
     setIsSubmitting(true)
-    
+
     try {
       // Ejecutar reCAPTCHA
       const token = await executeRecaptcha('contact_form_submit')
-      
+
       // Aquí podrías enviar el token a tu backend para verificación
       // Por ahora solo lo verificamos en el cliente
       if (!token) {
@@ -52,13 +52,13 @@ const ContactForm = () => {
       }
 
       // Mensaje mejor estructurado
-      const whatsappMessage = 
+      const whatsappMessage =
         `¡Hola! 👋\n\n` +
         `*Datos de contacto:*\n` +
         `• Nombre: ${formData.name.trim()}\n` +
         `• Edad: ${formData.age} años\n\n` +
         `Me gustaría agendar una cita. ¿Podrían ayudarme con los horarios disponibles? 💙`
-      
+
       // Codificación más robusta
       const encodedMessage = encodeURIComponent(whatsappMessage)
         .replace(/'/g, "%27")
@@ -67,10 +67,10 @@ const ContactForm = () => {
         .replace(/\*/g, "%2A")
         .replace(/~/g, "%7E")
         .replace(/%20/g, "+")
-      
+
       // Construcción de URL más confiable
       const whatsappUrl = `https://wa.me/523351107601?text=${encodedMessage}`
-      
+
       // Abrir en la misma pestaña (mejor para móviles)
       window.location.href = whatsappUrl
     } catch (err) {
@@ -94,7 +94,7 @@ const ContactForm = () => {
       >
         <form onSubmit={handleSubmit} className="space-y-6" aria-label="Formulario para agendar cita psicológica">
           {error && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               className="p-3 bg-red-50 text-red-600 rounded-lg text-sm border border-red-100"
@@ -103,7 +103,7 @@ const ContactForm = () => {
               {error}
             </motion.div>
           )}
-          
+
           <div className="space-y-1">
             <label htmlFor="name" className="block text-sm font-medium text-sky-800/90 mb-1 items-center">
               <FaUser className="mr-2 text-sky-500" />
@@ -150,11 +150,10 @@ const ContactForm = () => {
             whileTap={{ scale: 0.98 }}
             type="submit"
             disabled={isSubmitting}
-            className={`w-full py-4 px-6 rounded-xl font-semibold shadow-md transition-all flex items-center justify-center space-x-2 ${
-              isSubmitting 
-                ? 'bg-sky-400 cursor-not-allowed' 
+            className={`w-full py-4 px-6 rounded-xl font-semibold shadow-md transition-all flex items-center justify-center space-x-2 ${isSubmitting
+                ? 'bg-sky-400 cursor-not-allowed'
                 : 'bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-600 hover:to-sky-700'
-            }`}
+              }`}
             aria-label="Continuar al WhatsApp para agendar cita psicológica"
             itemProp="potentialAction"
           >
@@ -187,14 +186,18 @@ const ContactForm = () => {
         transition={{ delay: 0.4 }}
         className="mt-8 bg-sky-50/50 p-6 rounded-2xl border border-sky-100 text-center"
         itemScope
-        itemType="http://schema.org/FAQPage"
+        itemType="https://schema.org/FAQPage"
       >
-        <h3 className="text-lg font-medium text-sky-800 mb-2" itemProp="name">
-          ¿Por qué solo estos datos?
-        </h3>
-        <p className="text-sm text-sky-700/90" itemProp="acceptedAnswer">
-          Queremos hacerlo simple. El resto de información necesaria la recopilaremos directamente por WhatsApp para una experiencia más personalizada.
-        </p>
+        <div itemProp="mainEntity" itemScope itemType="https://schema.org/Question">
+          <h3 className="text-lg font-medium text-sky-800 mb-2" itemProp="name">
+            ¿Por qué solo estos datos?
+          </h3>
+          <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
+            <p className="text-sm text-sky-700/90" itemProp="text">
+              Queremos hacerlo simple. El resto de información necesaria la recopilaremos directamente por WhatsApp para una experiencia más personalizada.
+            </p>
+          </div>
+        </div>
         {/* Texto oculto para SEO */}
         <div className="sr-only">
           <meta itemProp="keywords" content="proceso de cita psicológica, información necesaria para terapia, consulta inicial psicólogo" />
@@ -206,8 +209,8 @@ const ContactForm = () => {
 
 const Contact = () => {
   return (
-    <section 
-      id="contact" 
+    <section
+      id="contact"
       className="py-16 md:py-24 bg-gradient-to-b from-sky-50 to-white"
       itemScope
       itemType="http://schema.org/ProfessionalService"
@@ -220,14 +223,14 @@ const Contact = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 
+          <h2
             className="text-4xl md:text-5xl font-bold text-sky-900 mb-4"
             itemProp="name"
             title="Agenda cita con psicóloga en Guadalajara y Zapopan"
           >
             Agenda tu cita
           </h2>
-          <p 
+          <p
             className="text-lg text-sky-700/90 max-w-2xl mx-auto"
             itemProp="description"
             aria-label="Formulario simple para agendar terapia psicológica presencial o virtual"
