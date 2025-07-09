@@ -1,129 +1,62 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { usePathname, useRouter } from 'next/navigation'
+import Link from 'next/link'
 import Image from 'next/image'
+import { throttle } from 'lodash'
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [activeLink, setActiveLink] = useState('#home')
+  const pathname = usePathname()
+  const router = useRouter()
 
-  // Datos SEO
-  const seoData = {
-    keywords: [
-      "psicóloga en Guadalajara",
-      "tanatología Zapopan",
-      "terapia de duelo Jalisco",
-      "consulta psicológica online",
-      "psicóloga especializada en crisis",
-      "acompañamiento emocional profesional"
-    ],
-    navItems: [
-      { 
-        name: 'Inicio', 
-        href: '#home',
-        title: "Psicóloga clínica en Guadalajara - Página principal",
-        keywords: "inicio terapia emocional, psicóloga especializada"
-      },
-      { 
-        name: 'Servicios', 
-        href: '#servicios',
-        title: "Servicios de psicología en Zapopan",
-        keywords: "terapia duelo, acompañamiento emocional, psicología oncológica"
-      },
-      { 
-        name: 'Enfoque', 
-        href: '#objetives',
-        title: "Método terapéutico especializado",
-        keywords: "enfoque psicológico, terapia basada en evidencia"
-      },
-      { 
-        name: 'Opiniones', 
-        href: '#opiniones',
-        title: "Experiencias de pacientes",
-        keywords: "testimonios psicología, resultados reales terapia"
-      },
-      { 
-        name: 'Contacto', 
-        href: '#contact',
-        title: "Agendar cita con psicóloga",
-        keywords: "consulta psicológica online, whatsapp para terapia"
-      }
-    ]
-  }
+  // Datos de navegación
+  const navItems = [
+    { name: 'Inicio', path: '/', id: 'home' },
+    { name: 'Servicios', path: '/servicios', id: 'servicios' },
+    { name: 'Enfoque', path: '/enfoque', id: 'enfoque' },
+    { name: 'Opiniones', path: '/opiniones', id: 'opiniones' },
+    { name: 'Ubicación', path: '/ubicacion', id: 'ubicacion' }
+  ]
 
+  // Efecto para el scroll con throttle
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10)
-      
-      if (window.scrollY < 50) {
-        setActiveLink('#home')
-        return
-      }
-
-      const sections = document.querySelectorAll('section')
-      let currentSection = '#home'
-      
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop - 100
-        const sectionBottom = sectionTop + section.offsetHeight
-        
-        if (window.scrollY >= sectionTop && window.scrollY < sectionBottom) {
-          currentSection = `#${section.id}`
-        }
-      })
-      
-      setActiveLink(currentSection)
     }
-    
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    const throttledScroll = throttle(handleScroll, 100)
+    window.addEventListener('scroll', throttledScroll)
+    return () => window.removeEventListener('scroll', throttledScroll)
   }, [])
 
-  const scrollToSection = (e, sectionId) => {
-  e.preventDefault();
-  setActiveLink(sectionId);
-  setMobileMenuOpen(false);
+  // Efecto para deshabilitar scroll cuando el menú móvil está abierto
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [mobileMenuOpen])
 
-  const element = document.querySelector(sectionId);
-  if (element) {
-    // Ajuste importante para móviles
-    const headerOffset = window.innerWidth < 768 ? 120 : 80;
-    const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-    // Solución alternativa más confiable
-    setTimeout(() => {
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }, 100); // Pequeño delay para asegurar el cierre del menú
+  // Manejo de navegación
+  const handleNavigation = (path) => {
+    setMobileMenuOpen(false)
+    router.push(path)
   }
-};
 
-  // Animaciones (se mantienen igual)
+  // Animaciones
   const itemVariants = {
     hidden: { opacity: 0, y: -10 },
     visible: (i) => ({
       opacity: 1,
       y: 0,
-      transition: {
-        delay: i * 0.1,
-        duration: 0.5,
-        type: 'spring',
-        stiffness: 120
-      }
-    }),
-    hover: {
-      scale: 1.05,
-      color: '#38bdf8',
-      transition: { duration: 0.2 }
-    },
-    active: {
-      color: '#0284c7',
-      scale: 1.05
-    }
+      transition: { delay: i * 0.1, duration: 0.3 }
+    })
   }
 
   const mobileMenuVariants = {
@@ -131,17 +64,9 @@ const Navbar = () => {
     visible: { 
       opacity: 1, 
       height: 'auto',
-      transition: {
-        duration: 0.3,
-        staggerChildren: 0.1
-      }
+      transition: { duration: 0.2 }
     },
     exit: { opacity: 0, height: 0 }
-  }
-
-  const mobileItemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0 }
   }
 
   return (
@@ -156,87 +81,103 @@ const Navbar = () => {
           boxShadow: scrolled ? '0 4px 20px rgba(0, 0, 0, 0.08)' : 'none'
         }}
         className="fixed w-full z-50 py-2 transition-all duration-300"
-        itemScope
-        itemType="http://schema.org/SiteNavigationElement"
-        aria-label="Navegación principal"
       >
         <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
-          
-          <a 
-            href="#home" 
-            onClick={(e) => scrollToSection(e, '#home')}
-            className="flex items-center"
-            itemProp="url"
+          {/* Logo */}
+          <Link 
+            href="/" 
+            className="flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 rounded-md"
+            aria-label="Ir al inicio"
           >
             <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-white bg-white">
               <Image 
                 src="/images/Logo1.png"
-                alt="Logo Psicóloga Lourdes Ramírez - Especialista en tanatología y crisis emocionales en Guadalajara"
+                alt="Psicóloga Lourdes Ramírez"
                 width={48}
                 height={48}
                 className="object-cover"
+                quality={85}
                 priority
-                itemProp="image"
-                title="Consultorio de Psicología Clínica"
+                sizes="(max-width: 768px) 48px, 48px"
               />
             </div>
             <div className="ml-3">
-              <p className="text-sky-800 font-bold text-sm sm:text-base" itemProp="name">Psic. Lourdes</p>
-              <p className="text-xs text-sky-500 hidden sm:block" itemProp="description">Psicología Clínica</p>
+              <p className="text-sky-800 font-bold text-sm sm:text-base">Psic. Lourdes</p>
+              <p className="text-xs text-sky-500 hidden sm:block">Psicología Clínica</p>
             </div>
-            {/* Texto oculto para SEO */}
-            <div className="sr-only">
-              <meta itemProp="keywords" content={seoData.keywords.join(', ')} />
-            </div>
+          </Link>
+
+          {/* Skip to content link (accesibilidad) */}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-white focus:px-4 focus:py-2 focus:rounded focus:text-sky-700 focus:font-bold focus:z-50"
+          >
+            Saltar al contenido
           </a>
 
           {/* Navegación desktop */}
-          <div className="hidden md:flex items-center space-x-6">
-            {seoData.navItems.map((item, i) => (
-              <a
-                key={item.href}
-                href={item.href}
-                onClick={(e) => scrollToSection(e, item.href)}
-                className={`relative py-2 text-sm uppercase font-medium ${
-                  activeLink === item.href ? 'text-sky-700' : 'text-sky-600 hover:text-sky-800'
-                }`}
-                title={item.title}
-                aria-label={`Ir a sección ${item.name}`}
-                itemProp="url"
+          <div className="hidden md:flex items-center space-x-4">
+            {navItems.map((item, i) => (
+              <motion.div
+                key={item.path}
+                variants={itemVariants}
+                initial="hidden"
+                animate="visible"
+                custom={i}
               >
-                {item.name}
-                {activeLink === item.href && (
-                  <motion.span 
-                    className="absolute bottom-0 left-0 w-full h-0.5 bg-sky-500"
-                    layoutId="navUnderline"
-                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                  />
-                )}
-                {/* Metadatos ocultos por ítem */}
-                <div className="sr-only">
-                  <meta itemProp="keywords" content={item.keywords} />
-                </div>
-              </a>
+                <Link
+                  href={item.path}
+                  className={`relative py-2 px-3 text-sm uppercase font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 rounded-md ${
+                    pathname === item.path ? 'text-sky-700' : 'text-sky-600 hover:text-sky-800'
+                  }`}
+                  aria-current={pathname === item.path ? 'page' : undefined}
+                >
+                  {item.name}
+                  {pathname === item.path && (
+                    <motion.span 
+                      className="absolute bottom-0 left-0 w-full h-0.5 bg-sky-500"
+                      layoutId="navUnderline"
+                      transition={{ type: 'spring' }}
+                    />
+                  )}
+                </Link>
+              </motion.div>
             ))}
-            <a
-              href="#contact"
-              onClick={(e) => scrollToSection(e, '#contact')}
-              className="bg-sky-600 hover:bg-sky-700 text-white px-5 py-2 rounded-full font-semibold text-sm shadow-md ml-2 transition-all"
-              aria-label="Agendar cita psicológica"
-              title="Solicitar primera consulta"
-              itemProp="potentialAction"
+            
+            {/* Botón destacado "Agenda tu cita" */}
+            <motion.div
+              variants={itemVariants}
+              initial="hidden"
+              animate="visible"
+              custom={navItems.length}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              Agenda una cita
-            </a>
+              <Link
+                href="/contacto"
+                className="relative py-2 px-4 text-sm uppercase font-bold bg-gradient-to-r from-sky-600 to-sky-800 text-white rounded-full shadow-md hover:shadow-lg transition-all hover:from-sky-700 hover:to-sky-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+              >
+                Agenda tu cita
+                <motion.span 
+                  className="absolute inset-0 border-2 border-white rounded-full"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 0.3, scale: 1 }}
+                  transition={{ 
+                    repeat: Infinity, 
+                    repeatType: "reverse", 
+                    duration: 1.5 
+                  }}
+                />
+              </Link>
+            </motion.div>
           </div>
 
           {/* Botón de menú móvil */}
           <button 
-            className="md:hidden text-sky-700 p-2"
+            className="md:hidden text-sky-700 p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 rounded-md"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
             aria-expanded={mobileMenuOpen}
-            aria-controls="mobile-menu"
           >
             {mobileMenuOpen ? (
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -253,52 +194,71 @@ const Navbar = () => {
         {/* Menú móvil */}
         <AnimatePresence>
           {mobileMenuOpen && (
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              variants={mobileMenuVariants}
-              className="md:hidden bg-white shadow-lg overflow-hidden"
-              id="mobile-menu"
-            >
-              <div className="container mx-auto px-4 py-2">
-                {seoData.navItems.map((item) => (
-                  <motion.div
-                    key={item.href}
-                    variants={mobileItemVariants}
-                    className="border-b border-sky-50 last:border-0"
-                  >
-                    <a
-                      href={item.href}
-                      onClick={(e) => scrollToSection(e, item.href)}
-                      className={`block py-4 px-2 ${
-                        activeLink === item.href 
-                          ? 'text-sky-700 font-semibold' 
-                          : 'text-sky-600 hover:text-sky-800'
-                      }`}
-                      aria-label={`Ir a ${item.name}`}
-                      title={item.title}
+            <>
+              {/* Overlay */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+                onClick={() => setMobileMenuOpen(false)}
+              />
+              
+              {/* Menú */}
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                variants={mobileMenuVariants}
+                className="md:hidden bg-white shadow-lg overflow-hidden fixed w-full z-50"
+              >
+                <div className="container mx-auto px-4 py-2">
+                  {navItems.map((item, i) => (
+                    <motion.div
+                      key={item.path}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.05, duration: 0.2 }}
+                      className="border-b border-sky-50"
                     >
-                      {item.name}
-                    </a>
-                  </motion.div>
-                ))}
-                <div className="py-4 px-2">
-                  <a
-                    href="#contact"
-                    onClick={(e) => scrollToSection(e, '#contact')}
-                    className="block bg-sky-600 hover:bg-sky-700 text-white text-center py-3 rounded-full font-semibold text-sm shadow-md transition-all"
-                    aria-label="Agendar cita desde móvil"
-                    title="Contactar psicóloga"
+                      <button
+                        onClick={() => handleNavigation(item.path)}
+                        className={`block w-full text-left py-4 px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 rounded-md ${
+                          pathname === item.path 
+                            ? 'text-sky-700 font-semibold' 
+                            : 'text-sky-600 hover:text-sky-800'
+                        }`}
+                      >
+                        {item.name}
+                        {pathname === item.path && (
+                          <span className="ml-2 text-sky-500">•</span>
+                        )}
+                      </button>
+                    </motion.div>
+                  ))}
+                  {/* Botón destacado en móvil */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: navItems.length * 0.05, duration: 0.2 }}
+                    className="pt-4 pb-6"
                   >
-                    Agenda una cita
-                  </a>
+                    <button
+                      onClick={() => handleNavigation('/contacto')}
+                      className="w-full py-3 px-4 bg-gradient-to-r from-sky-600 to-sky-800 text-white font-bold rounded-md shadow-md hover:from-sky-700 hover:to-sky-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
+                    >
+                      AGENDA TU CITA
+                    </button>
+                  </motion.div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </motion.nav>
+      
+      {/* Espacio para el navbar fixed */}
+      <div className="h-16 md:h-20"></div>
     </>
   )
 }

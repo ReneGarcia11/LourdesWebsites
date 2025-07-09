@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import Head from 'next/head'
 
 const Opinions = () => {
-  // 1. KEYWORDS PARA SEO (INVISIBLES)
+  
   const seoKeywords = `
     Psicología clínica Guadalajara, Psicóloga especializada en duelo Zapopan,
     Acompañamiento psicológico Jalisco, Terapia emocional Guadalajara,
@@ -352,4 +352,4 @@ const Opinions = () => {
   )
 }
 
-export default Opinions
+export default Opinions 

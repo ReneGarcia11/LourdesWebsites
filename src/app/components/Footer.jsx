@@ -19,7 +19,7 @@ const Footer = () => {
     services: [
       { name: "Manejo del Duelo", keywords: "tanatología, pérdidas emocionales, duelo complicado" },
       { name: "Acompañamiento Integral", keywords: "enfermedades crónicas, pacientes terminales, cuidados paliativos" },
-      { name: "Oncología Psicológica", keywords: "cáncer, apoyo emocional oncología, terapia para pacientes oncológicos" },
+      { name: "Psicología Oncológica", keywords: "cáncer, apoyo emocional oncología, terapia para pacientes oncológicos" },
       { name: "Terapia Individual", keywords: "psicoterapia personalizada, ansiedad, depresión, crecimiento personal" }
     ]
   }
@@ -78,7 +78,7 @@ const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <Link 
-                  href="#home" 
+                  href="/" 
                   className="text-gray-300 hover:text-white transition-colors"
                   aria-label="Volver al inicio"
                   itemProp="url"
@@ -88,7 +88,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link 
-                  href="#servicios" 
+                  href="/servicios" 
                   className="text-gray-300 hover:text-white transition-colors"
                   aria-label="Ver servicios psicológicos"
                   itemProp="makesOffer"
@@ -98,7 +98,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link 
-                  href="#objetives" 
+                  href="/enfoque" 
                   className="text-gray-300 hover:text-white transition-colors"
                   aria-label="Conocer el enfoque terapéutico"
                 >
@@ -107,7 +107,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link 
-                  href="#opiniones" 
+                  href="/opiniones" 
                   className="text-gray-300 hover:text-white transition-colors"
                   aria-label="Leer opiniones de pacientes"
                 >
@@ -116,7 +116,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link 
-                  href="#contact" 
+                  href="/contacto" 
                   className="text-gray-300 hover:text-white transition-colors"
                   aria-label="Contactar a la psicóloga"
                   itemProp="potentialAction"
