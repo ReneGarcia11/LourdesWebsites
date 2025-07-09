@@ -70,7 +70,7 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="preload" href="/logo-psicologa.ico" as="image" />
         <link rel="icon" href="/logo-psicologa.ico?v=3" type="image/x-icon" />
-        <link rel="shortcut icon" href="/favicon.ico?v=3" type="image/x-icon" />
+        <link rel="shortcut icon" href="/logo-psicologa.ico?v=3" type="image/x-icon" />
         <link rel="preload" href="/opengraph-image.jpg" as="image" />
         
         {/* Datos estructurados para negocio local */}
