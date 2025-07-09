@@ -155,7 +155,7 @@ const Header = () => {
             <motion.a
               whileHover={{ y: -3 }}
               whileTap={{ scale: 0.98 }}
-              href="#contact"
+              href="/contacto"
               className="bg-sky-600 hover:bg-sky-700 text-white px-8 py-3.5 rounded-full font-semibold text-lg shadow-md transition-all"
             >
               Agenda tu primera cita
@@ -164,7 +164,7 @@ const Header = () => {
             <motion.a
               whileHover={{ y: -3 }}
               whileTap={{ scale: 0.98 }}
-              href="#services"
+              href="/servicios"
               className="bg-white hover:bg-sky-50 text-sky-600 border-2 border-sky-600 px-8 py-3.5 rounded-full font-semibold text-lg shadow-md transition-all"
             >
               Nuestros servicios

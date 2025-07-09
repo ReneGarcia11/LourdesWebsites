@@ -1,4 +1,3 @@
-// src/app/sitemap.js
 export default async function sitemap() {
   const baseUrl = 'https://crisisyduelo.com';
   
