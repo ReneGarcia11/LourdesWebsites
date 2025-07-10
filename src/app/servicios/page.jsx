@@ -35,9 +35,9 @@ const Services = () => {
       seoData: {
         title: "Acompañamiento psicológico en enfermedades terminales | Guadalajara y Zapopan",
         keywords: [
-          "cuidados paliativos psicológicos",
+          "cuidados paliativos psicológicos Guadalajara ",
           "apoyo emocional en cáncer",
-          "psicóloga para enfermedades crónicas",
+          "psicóloga para enfermedades crónicas Zapopan",
           "acompañamiento en terminalidad",
           "terapia para pacientes graves Jalisco"
         ]
@@ -54,10 +54,10 @@ const Services = () => {
       seoData: {
         title: "Psicóloga oncológica en Guadalajara | Apoyo emocional para cáncer | Zapopan",
         keywords: [
-          "psicología en oncología",
-          "terapia para pacientes con cáncer",
+          "psicología en oncología Guadalajara",
+          "terapia para pacientes con cáncer Zapopan",
           "manejo emocional del cáncer",
-          "apoyo a familiares de enfermos oncológicos",
+          "apoyo a familiares de enfermos oncológicos Guadalajara",
           "psicóloga para quimioterapia Jalisco"
         ]
       }
@@ -73,11 +73,11 @@ const Services = () => {
       seoData: {
         title: "Terapia psicológica individual en Guadalajara | Psicóloga clínica | Zapopan",
         keywords: [
-          "psicoterapia individual",
-          "terapia para ansiedad y depresión",
+          "terapia individual Zapopan",
+          "terapia para ansiedad y depresión Guadalajara",
           "crisis existencial",
           "crecimiento personal con terapia",
-          "psicóloga para adultos Jalisco"
+          "psicóloga para adultos Guadalajara"
         ]
       }
     }
