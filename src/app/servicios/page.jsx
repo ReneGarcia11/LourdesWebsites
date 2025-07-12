@@ -17,10 +17,12 @@ const Services = () => {
         keywords: [
           "tanatología Guadalajara",
           "psicóloga para duelo Zapopan",
-          "manejo de pérdidas emocionales",
-          "acompañamiento en duelo Jalisco",
-          "terapia para duelos complicados",
-          "duelo anticipado Guadalajara"
+          "manejo de pérdidas emocionales Guadalajara",
+          "acompañamiento en duelo Jalisco Zapopan",
+          "terapia para duelos complicados Guadalajara",
+          "duelo anticipado Guadalajara Zapopan",
+          "terapia de duelo Guadalajara",
+          "psicóloga especialista en duelo Zapopan"
         ]
       }
     },
@@ -35,11 +37,13 @@ const Services = () => {
       seoData: {
         title: "Acompañamiento psicológico en enfermedades terminales | Guadalajara y Zapopan",
         keywords: [
-          "cuidados paliativos psicológicos Guadalajara ",
-          "apoyo emocional en cáncer",
+          "cuidados paliativos psicológicos Guadalajara",
+          "apoyo emocional en cáncer Guadalajara Zapopan",
           "psicóloga para enfermedades crónicas Zapopan",
-          "acompañamiento en terminalidad",
-          "terapia para pacientes graves Jalisco"
+          "acompañamiento en terminalidad Guadalajara",
+          "terapia para pacientes graves Jalisco Zapopan",
+          "psicología en enfermedades terminales Guadalajara",
+          "apoyo psicológico para enfermos crónicos Zapopan"
         ]
       }
     },
@@ -56,9 +60,11 @@ const Services = () => {
         keywords: [
           "psicología en oncología Guadalajara",
           "terapia para pacientes con cáncer Zapopan",
-          "manejo emocional del cáncer",
-          "apoyo a familiares de enfermos oncológicos Guadalajara",
-          "psicóloga para quimioterapia Jalisco"
+          "manejo emocional del cáncer Guadalajara",
+          "apoyo a familiares de enfermos oncológicos Guadalajara Zapopan",
+          "psicóloga para quimioterapia Jalisco Guadalajara",
+          "terapia oncológica Guadalajara",
+          "psicóloga especialista en cáncer Zapopan"
         ]
       }
     },
@@ -73,11 +79,13 @@ const Services = () => {
       seoData: {
         title: "Terapia psicológica individual en Guadalajara | Psicóloga clínica | Zapopan",
         keywords: [
-          "terapia individual Zapopan",
+          "terapia individual Zapopan Guadalajara",
           "terapia para ansiedad y depresión Guadalajara",
-          "crisis existencial",
-          "crecimiento personal con terapia",
-          "psicóloga para adultos Guadalajara"
+          "crisis existencial Guadalajara Zapopan",
+          "crecimiento personal con terapia Guadalajara",
+          "psicóloga para adultos Guadalajara Zapopan",
+          "terapia psicológica individual Zapopan",
+          "psicóloga clínica Guadalajara"
         ]
       }
     }

@@ -25,7 +25,7 @@ const Footer = () => {
   }
 
   return (
-    <footer 
+    <footer
       className="bg-royal-blue text-white pt-16 pb-8"
       itemScope
       itemType="http://schema.org/ProfessionalService"
@@ -41,15 +41,15 @@ const Footer = () => {
             itemScope
             itemType="http://schema.org/Person"
           >
-            <h3 
+            <h3
               className="text-xl font-bold mb-6"
               itemProp="name"
               title="Psicóloga Lourdes Ramírez - Especialista en tanatología y crisis"
             >
               Psic. Lourdes Ramírez
             </h3>
-            <p 
-              className="text-gray-300 mb-4"
+            <p
+              className="text-gray-400 mb-4"  // Cambiado de text-gray-300 a text-gray-400
               itemProp="description"
               aria-label="Psicóloga clínica especializada en Guadalajara y Zapopan"
             >
@@ -69,7 +69,7 @@ const Footer = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <h3 
+            <h3
               className="text-xl font-bold mb-6"
               aria-label="Accesos rápidos a las secciones principales"
             >
@@ -77,9 +77,9 @@ const Footer = () => {
             </h3>
             <ul className="space-y-3">
               <li>
-                <Link 
-                  href="/" 
-                  className="text-gray-300 hover:text-white transition-colors"
+                <Link
+                  href="/"
+                  className="text-gray-400 hover:text-white transition-colors"  // Cambiado de text-gray-300 a text-gray-400
                   aria-label="Volver al inicio"
                   itemProp="url"
                 >
@@ -87,9 +87,9 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/servicios" 
-                  className="text-gray-300 hover:text-white transition-colors"
+                <Link
+                  href="/servicios"
+                  className="text-gray-400 hover:text-white transition-colors"  // Cambiado de text-gray-300 a text-gray-400
                   aria-label="Ver servicios psicológicos"
                   itemProp="makesOffer"
                 >
@@ -97,27 +97,27 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/enfoque" 
-                  className="text-gray-300 hover:text-white transition-colors"
+                <Link
+                  href="/enfoque"
+                  className="text-gray-400 hover:text-white transition-colors"  // Cambiado de text-gray-300 a text-gray-400
                   aria-label="Conocer el enfoque terapéutico"
                 >
                   Enfoque
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/opiniones" 
-                  className="text-gray-300 hover:text-white transition-colors"
+                <Link
+                  href="/opiniones"
+                  className="text-gray-400 hover:text-white transition-colors"  // Cambiado de text-gray-300 a text-gray-400
                   aria-label="Leer opiniones de pacientes"
                 >
                   Opiniones
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/contacto" 
-                  className="text-gray-300 hover:text-white transition-colors"
+                <Link
+                  href="/contacto"
+                  className="text-gray-400 hover:text-white transition-colors"  // Cambiado de text-gray-300 a text-gray-400
                   aria-label="Contactar a la psicóloga"
                   itemProp="potentialAction"
                 >
@@ -136,7 +136,7 @@ const Footer = () => {
             itemScope
             itemType="http://schema.org/ItemList"
           >
-            <h3 
+            <h3
               className="text-xl font-bold mb-6"
               itemProp="name"
               title="Servicios de psicología especializada"
@@ -146,8 +146,8 @@ const Footer = () => {
             <ul className="space-y-3">
               {seoData.services.map((service, index) => (
                 <li key={index} itemProp="itemListElement">
-                  <span 
-                    className="text-gray-300"
+                  <span
+                    className="text-gray-400"  // Cambiado de text-gray-300 a text-gray-400
                     itemProp="name"
                     title={`${service.name} en Guadalajara y Zapopan`}
                   >
@@ -171,7 +171,7 @@ const Footer = () => {
             itemScope
             itemType="http://schema.org/ContactPoint"
           >
-            <h3 
+            <h3
               className="text-xl font-bold mb-6"
               itemProp="name"
               title="Datos de contacto de la psicóloga"
@@ -180,9 +180,9 @@ const Footer = () => {
             </h3>
             <ul className="space-y-4">
               <li className="flex items-start">
-                <FaPhone className="text-gray-300 mt-1 mr-3 flex-shrink-0" />
-                <span 
-                  className="text-gray-300"
+                <FaPhone className="text-gray-400 mt-1 mr-3 flex-shrink-0" />
+                <span
+                  className="text-gray-400 whitespace-nowrap"  // Agregado whitespace-nowrap
                   itemProp="telephone"
                   aria-label="Número de teléfono para citas"
                 >
@@ -190,16 +190,16 @@ const Footer = () => {
                 </span>
               </li>
               <li className="flex items-start">
-                <FaMapMarkerAlt className="text-gray-300 mt-1 mr-3 flex-shrink-0" />
-                <span 
-                  className="text-gray-300"
+                <FaMapMarkerAlt className="text-gray-400 mt-1 mr-3 flex-shrink-0" />
+                <span
+                  className="text-gray-400"
                   itemProp="address"
                   itemScope
                   itemType="http://schema.org/PostalAddress"
                 >
-                  <span itemProp="streetAddress">Avenida Miguel angel #14</span>, 
-                  <span itemProp="addressLocality"> Colonia Real Vallarta</span>, 
-                  <span itemProp="postalCode"> 45020</span>, 
+                  <span itemProp="streetAddress">Avenida Miguel angel #14</span>,
+                  <span itemProp="addressLocality"> Colonia Real Vallarta</span>,
+                  <span itemProp="postalCode"> 45020</span>,
                   <span itemProp="addressRegion"> Zapopan, Jal.</span>
                 </span>
               </li>
@@ -209,8 +209,8 @@ const Footer = () => {
 
         <div className="border-t border-gray-700 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p 
-              className="text-gray-400 text-sm mb-4 md:mb-0"
+            <p
+              className="text-gray-500 text-sm mb-4 md:mb-0"  // Cambiado de text-gray-400 a text-gray-500
               itemProp="copyrightYear"
             >
               © {currentYear} Psic. Lourdes Ramírez. Todos los derechos reservados.
