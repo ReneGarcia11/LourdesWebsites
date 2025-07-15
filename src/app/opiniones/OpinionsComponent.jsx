@@ -223,26 +223,14 @@ const OpinionsComponent = () => {
                     itemScope
                     itemType="https://schema.org/Review"
                   >
-                    <div itemScope itemType="https://schema.org/Service" itemProp="itemReviewed">
-                      <meta itemProp="name" content="Terapia Psicológica" />
-                      <meta itemProp="serviceType" content="Psicología Clínica" />
-                      <div itemScope itemType="https://schema.org/Organization" itemProp="provider">
-                        <meta itemProp="name" content="Clínica BriZuela" />
-                      </div>
-                    </div>
-                    
-                    <div itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
+                    <div className="flex gap-1 mb-2" itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
                       <meta itemProp="ratingValue" content={opinion.rating} />
                       <meta itemProp="bestRating" content="5" />
-                      <div className="flex gap-1 mb-2">
-                        {renderStars(opinion.rating)}
-                      </div>
+                      {renderStars(opinion.rating)}
                     </div>
-                    
                     <blockquote className="text-sky-800 text-sm italic mb-3 flex-grow" itemProp="reviewBody">
                       "{opinion.content}"
                     </blockquote>
-                    
                     <div className="flex justify-between items-center mt-auto">
                       <div>
                         <p className="font-medium text-sky-900 text-sm" itemProp="author">{opinion.name}</p>

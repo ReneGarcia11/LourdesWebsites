@@ -1,3 +1,4 @@
+// app/opiniones/page.jsx
 import OpinionsWrapper from './OpinionsWrapper'
 
 export const metadata = {
@@ -30,12 +31,12 @@ export const metadata = {
 
 export default function OpinionsPage() {
   return (
-    <main itemScope itemType="https://schema.org/WebPage">
+    <main>
       {/* Contenido estático para SEO */}
       <div className="sr-only" aria-hidden="true">
-        <h1 itemProp="headline">Opiniones y Testimonios - Clínica BriZuela</h1>
-        <p itemProp="description">Testimonios reales de pacientes sobre nuestros servicios psicológicos en Guadalajara y Zapopan</p>
-        <p>Calificación promedio: <span itemProp="aggregateRating">4.8</span>/5 basado en más de 100 opiniones</p>
+        <h1>Opiniones y Testimonios - Clínica BriZuela</h1>
+        <p>Testimonios reales de pacientes sobre nuestros servicios psicológicos en Guadalajara y Zapopan</p>
+        <p>Calificación promedio: 4.8/5 basado en más de 100 opiniones</p>
       </div>
       
       <OpinionsWrapper />
