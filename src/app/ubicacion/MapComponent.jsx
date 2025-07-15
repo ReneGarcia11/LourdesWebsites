@@ -17,7 +17,15 @@ const MapComponent = () => {
       "clínica de psicología Guadalajara",
       "ubicación psicóloga Real Vallarta",
       "dirección exacta psicólogo Jalisco",
-      "cómo llegar a terapia psicológica"
+      "cómo llegar a terapia psicológica Zapopan",
+      "Clinica BriZuela ubicación",
+      "psicología clínica Real Vallarta",
+      "terapia psicológica en Zapopan",
+      "psicólogos en Real Vallarta",
+      "consultorio psicológico en Guadalajara",
+      "dirección clínica BriZuela",
+      "psicología en Jalisco",
+      "Clinica BriZuela",
     ],
     telephone: "+52 33 1234 5678",
     openingHours: "Mo-Fr 09:00-18:00"
