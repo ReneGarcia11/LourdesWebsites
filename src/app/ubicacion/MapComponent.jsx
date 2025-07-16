@@ -25,7 +25,12 @@ const MapComponent = () => {
       "consultorio psicológico en Guadalajara",
       "dirección clínica BriZuela",
       "psicología en Jalisco",
-      "Clinica BriZuela",
+      "terapia presencial Zapopan",
+      "psicólogos en Guadalajara",
+      "psicologa en Guadalajara",
+      "psicóloga en Zapopan",
+      "psicologa Lourdes Ramirez",
+      "clinica BriZuela",
     ],
     telephone: "+52 33 1234 5678",
     openingHours: "Mo-Fr 09:00-18:00"
