@@ -10,7 +10,6 @@ const OpinionsComponent = () => {
   const [opinions, setOpinions] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [itemsPerGroup, setItemsPerGroup] = useState(2)
   const sliderRef = useRef(null)
   const intervalRef = useRef(null)
 
@@ -31,24 +30,12 @@ const OpinionsComponent = () => {
     fetchOpinions()
   }, [])
 
-  // 3. Responsive items per group
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const handleResize = () => {
-        setItemsPerGroup(window.innerWidth < 768 ? 1 : 2)
-      }
-      handleResize()
-      window.addEventListener('resize', handleResize)
-      return () => window.removeEventListener('resize', handleResize)
-    }
-  }, [])
-
-  // 4. Renderizado de estrellas mejorado
+  // 3. Renderizado de estrellas
   const renderStars = (rating) => {
     return [...Array(5)].map((_, i) => (
       <div
         key={i}
-        className={`w-5 h-5 ${i < rating ? 'text-yellow-400' : 'text-gray-300'}`}
+        className={`w-4 h-4 ${i < rating ? 'text-yellow-400' : 'text-gray-300'}`}
         aria-label={`${rating} estrellas`}
         aria-hidden={i >= rating}
       >
@@ -59,27 +46,27 @@ const OpinionsComponent = () => {
     ))
   }
 
-  // 5. Filtrado y cálculos
+  // 4. Filtrado y cálculos
   const filteredOpinions = activeTab === 'all' 
     ? opinions 
     : opinions.filter(opinion => opinion.rating === parseInt(activeTab))
 
   const averageRating = opinions.length > 0 
-    ? (opinions.reduce((sum, o) => sum + o.rating, 0) / opinions.length
-): 0
+    ? (opinions.reduce((sum, o) => sum + o.rating, 0) / opinions.length).toFixed(1)
+    : '0.0'
 
-  // 6. Agrupamiento de opiniones
+  // 5. Agrupamiento de opiniones
   const groupedOpinions = useCallback(() => {
     const groups = []
-    for (let i = 0; i < filteredOpinions.length; i += itemsPerGroup) {
-      groups.push(filteredOpinions.slice(i, i + itemsPerGroup))
+    for (let i = 0; i < filteredOpinions.length; i += 3) {
+      groups.push(filteredOpinions.slice(i, i + 3))
     }
     return groups
-  }, [filteredOpinions, itemsPerGroup])
+  }, [filteredOpinions])
 
   const groups = groupedOpinions()
 
-  // 7. Autoplay del slider más lento (8s)
+  // 6. Autoplay del slider
   useEffect(() => {
     const startAutoPlay = () => {
       if (groups.length <= 1) return
@@ -88,7 +75,7 @@ const OpinionsComponent = () => {
         if (!isHovered) {
           setCurrentSlide(prev => (prev + 1) % groups.length)
         }
-      }, 8000)
+      }, 5000)
     }
 
     startAutoPlay()
@@ -100,7 +87,7 @@ const OpinionsComponent = () => {
     }
   }, [groups.length, isHovered])
 
-  // 8. Funciones de navegación
+  // 7. Funciones de navegación
   const goToSlide = useCallback((index) => {
     setCurrentSlide(index)
     resetInterval()
@@ -122,13 +109,13 @@ const OpinionsComponent = () => {
       if (!isHovered && groups.length > 1) {
         setCurrentSlide(prev => (prev + 1) % groups.length)
       }
-    }, 8000)
+    }, 5000)
   }, [groups.length, isHovered])
 
-  // 9. Estados de carga
+  // 8. Estados de carga
   if (loading) {
     return (
-      <div className="text-center py-12">
+      <div className="text-center py-8">
         <div className="animate-pulse flex space-x-4 justify-center">
           <div className="rounded-full bg-sky-200 h-12 w-12"></div>
         </div>
@@ -139,7 +126,7 @@ const OpinionsComponent = () => {
 
   if (error) {
     return (
-      <div className="text-center py-12 text-red-500">
+      <div className="text-center py-8 text-red-500">
         <p>Error al cargar las opiniones: {error}</p>
       </div>
     )
@@ -147,24 +134,24 @@ const OpinionsComponent = () => {
 
   if (opinions.length === 0) {
     return (
-      <div className="text-center py-12 text-sky-700">
+      <div className="text-center py-8 text-sky-700">
         <p>Actualmente no hay opiniones disponibles</p>
       </div>
     )
   }
 
-  // 10. Render principal mejorado
+  // 9. Render principal
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.4 }}
-        className="text-center mb-12"
+        className="text-center mb-8"
       >
-        <h2 className="text-3xl md:text-4xl font-bold text-sky-900 mb-3">Opiniones de Nuestros Pacientes</h2>
-        <p className="text-lg text-sky-700 max-w-2xl mx-auto">
+        <h2 className="text-2xl md:text-3xl font-bold text-sky-900 mb-2">Opiniones de Nuestros Pacientes</h2>
+        <p className="text-base text-sky-700 max-w-2xl mx-auto">
           Lo que dicen quienes han confiado en nuestro servicio
         </p>
       </motion.div>
@@ -174,53 +161,49 @@ const OpinionsComponent = () => {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ delay: 0.2 }}
-        className="flex flex-wrap justify-center gap-3 mb-10"
+        className="flex flex-wrap justify-center gap-2 mb-6"
       >
         <button
           onClick={() => {
             setActiveTab('all')
             setCurrentSlide(0)
           }}
-          className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+          className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
             activeTab === 'all' 
               ? 'bg-sky-600 text-white shadow-md' 
-              : 'bg-white text-sky-700 hover:bg-sky-50 border border-sky-200'
+              : 'bg-white text-sky-700 hover:bg-sky-50'
           }`}
           aria-label="Mostrar todas las opiniones"
         >
-          Todas ({opinions.length})
+          Todas
         </button>
-        {[5, 4].map(rating => {
-          const count = opinions.filter(o => o.rating === rating).length
-          return (
-            <button
-              key={rating}
-              onClick={() => {
-                setActiveTab(rating.toString())
-                setCurrentSlide(0)
-              }}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
-                activeTab === rating.toString() 
-                  ? 'bg-sky-600 text-white shadow-md' 
-                  : 'bg-white text-sky-700 hover:bg-sky-50 border border-sky-200'
-              }`}
-              aria-label={`Mostrar opiniones de ${rating} estrellas`}
-            >
-              {renderStars(rating)}
-              <span>({count})</span>
-            </button>
-          )
-        })}
+        {[5, 4].map(rating => (
+          <button
+            key={rating}
+            onClick={() => {
+              setActiveTab(rating.toString())
+              setCurrentSlide(0)
+            }}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1 ${
+              activeTab === rating.toString() 
+                ? 'bg-sky-600 text-white shadow-md' 
+                : 'bg-white text-sky-700 hover:bg-sky-50'
+            }`}
+            aria-label={`Mostrar opiniones de ${rating} estrellas`}
+          >
+            {rating} Estrellas
+          </button>
+        ))}
       </motion.div>
 
       <div 
-        className="relative overflow-hidden mb-10 px-2"
+        className="relative overflow-hidden mb-6"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         <div 
           ref={sliderRef}
-          className="flex transition-transform duration-700 ease-in-out"
+          className="flex transition-transform duration-500 ease-in-out"
           style={{ 
             transform: `translateX(-${currentSlide * 100}%)`,
             width: `${groups.length * 100}%`
@@ -228,35 +211,32 @@ const OpinionsComponent = () => {
         >
           {groups.map((group, groupIndex) => (
             <div key={groupIndex} className="w-full flex-shrink-0 px-2">
-              <div className={`grid ${itemsPerGroup === 1 ? 'grid-cols-1' : 'grid-cols-2'} gap-6`}>
+              <div className="grid md:grid-cols-3 gap-4">
                 {group.map((opinion) => (
                   <motion.div
                     key={opinion.id}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
-                    className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-all border border-sky-100/50 h-full flex flex-col"
+                    transition={{ duration: 0.3 }}
+                    className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-sky-100/50 h-full flex flex-col"
                     itemScope
                     itemType="https://schema.org/Review"
                   >
-                    <div className="flex gap-1 mb-4" itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
+                    <div className="flex gap-1 mb-2" itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
                       <meta itemProp="ratingValue" content={opinion.rating} />
                       <meta itemProp="bestRating" content="5" />
                       {renderStars(opinion.rating)}
                     </div>
-                    <blockquote 
-                      className="text-sky-800 text-base leading-relaxed mb-4 flex-grow line-clamp-5 hover:line-clamp-none transition-all"
-                      itemProp="reviewBody"
-                    >
-                      <span className="italic">"{opinion.content}"</span>
+                    <blockquote className="text-sky-800 text-sm italic mb-3 flex-grow" itemProp="reviewBody">
+                      "{opinion.content}"
                     </blockquote>
-                    <div className="flex justify-between items-center mt-auto pt-4 border-t border-sky-100">
+                    <div className="flex justify-between items-center mt-auto">
                       <div>
-                        <p className="font-medium text-sky-900 text-base" itemProp="author">{opinion.name}</p>
-                        <p className="text-sm text-sky-600">{opinion.role}</p>
+                        <p className="font-medium text-sky-900 text-sm" itemProp="author">{opinion.name}</p>
+                        <p className="text-xs text-sky-600">{opinion.role}</p>
                       </div>
-                      <span className="text-sm text-sky-500 whitespace-nowrap" itemProp="datePublished">{opinion.date}</span>
+                      <span className="text-xs text-sky-500" itemProp="datePublished">{opinion.date}</span>
                     </div>
                   </motion.div>
                 ))}
@@ -269,19 +249,19 @@ const OpinionsComponent = () => {
           <>
             <button
               onClick={goToPrevSlide}
-              className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg z-10 transition-all hover:scale-110 ml-2"
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-1.5 rounded-full shadow-md z-10"
               aria-label="Opinión anterior"
             >
-              <svg className="w-6 h-6 text-sky-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-sky-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
             <button
               onClick={goToNextSlide}
-              className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg z-10 transition-all hover:scale-110 mr-2"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-1.5 rounded-full shadow-md z-10"
               aria-label="Siguiente opinión"
             >
-              <svg className="w-6 h-6 text-sky-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-sky-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
@@ -290,13 +270,13 @@ const OpinionsComponent = () => {
       </div>
 
       {groups.length > 1 && (
-        <div className="flex justify-center mt-8 gap-2">
+        <div className="flex justify-center mt-4 gap-1.5">
           {groups.map((_, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all ${
-                index === currentSlide ? 'bg-sky-600 w-6' : 'bg-sky-300'
+              className={`w-2 h-2 rounded-full transition-all ${
+                index === currentSlide ? 'bg-sky-600 w-4' : 'bg-sky-300'
               }`}
               aria-label={`Ir a opiniones ${index + 1}`}
             />
@@ -309,24 +289,21 @@ const OpinionsComponent = () => {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ delay: 0.4 }}
-        className="bg-white/90 backdrop-blur-sm p-6 rounded-xl border border-sky-100 text-center max-w-md mx-auto mt-12 shadow-sm"
+        className="bg-white/80 backdrop-blur-sm p-3 rounded-lg border border-sky-100 text-center max-w-md mx-auto"
         itemScope
         itemType="https://schema.org/AggregateRating"
       >
-        <div className="flex flex-col items-center">
-          <div className="flex items-center gap-1 mb-2">
-            {renderStars(Math.round(averageRating))}
-          </div>
-          <div className="text-3xl font-bold text-sky-900 mb-1" itemProp="ratingValue">
-            {averageRating.toFixed(1)}
-            <span className="text-xl text-sky-600">/5</span>
-          </div>
-          <p className="text-sm text-sky-700">
-            Basado en <span itemProp="reviewCount">{opinions.length}</span> {opinions.length === 1 ? 'opinión' : 'opiniones'}
-          </p>
+        <div className="flex justify-center items-center gap-1.5 mb-1">
+          {renderStars(Math.round(parseFloat(averageRating)))}
+          <span className="text-base font-bold text-sky-900" itemProp="ratingValue">{averageRating}</span>
+          <span className="text-base text-sky-700">/</span>
+          <span className="text-base text-sky-700" itemProp="bestRating">5</span>
         </div>
+        <p className="text-xs text-sky-700">
+          Basado en <span itemProp="reviewCount">{opinions.length}</span> opiniones
+        </p>
       </motion.div>
-    </div>
+    </>
   )
 }
 
