@@ -10,6 +10,7 @@ const OpinionsComponent = () => {
   const [opinions, setOpinions] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [itemsPerGroup, setItemsPerGroup] = useState(2) // Valor inicial por defecto
   const sliderRef = useRef(null)
   const intervalRef = useRef(null)
 
@@ -30,7 +31,27 @@ const OpinionsComponent = () => {
     fetchOpinions()
   }, [])
 
-  // 3. Renderizado de estrellas
+  // 3. Determinar items por grupo basado en el tamaño de pantalla
+  useEffect(() => {
+    // Solo ejecutar en el cliente
+    if (typeof window !== 'undefined') {
+      const handleResize = () => {
+        setItemsPerGroup(window.innerWidth < 768 ? 1 : 2)
+      }
+      
+      // Establecer el valor inicial
+      handleResize()
+      
+      // Escuchar cambios de tamaño
+      window.addEventListener('resize', handleResize)
+      
+      return () => {
+        window.removeEventListener('resize', handleResize)
+      }
+    }
+  }, [])
+
+  // 4. Renderizado de estrellas
   const renderStars = (rating) => {
     return [...Array(5)].map((_, i) => (
       <div
@@ -46,7 +67,7 @@ const OpinionsComponent = () => {
     ))
   }
 
-  // 4. Filtrado y cálculos
+  // 5. Filtrado y cálculos
   const filteredOpinions = activeTab === 'all' 
     ? opinions 
     : opinions.filter(opinion => opinion.rating === parseInt(activeTab))
@@ -55,27 +76,19 @@ const OpinionsComponent = () => {
     ? (opinions.reduce((sum, o) => sum + o.rating, 0) / opinions.length).toFixed(1)
     : '0.0'
 
-  // 5. Agrupamiento de opiniones - ahora 1 en móvil y 2 en desktop
+  // 6. Agrupamiento de opiniones
   const groupedOpinions = useCallback(() => {
     const groups = []
-    const itemsPerGroup = window.innerWidth < 768 ? 1 : 2
     for (let i = 0; i < filteredOpinions.length; i += itemsPerGroup) {
       groups.push(filteredOpinions.slice(i, i + itemsPerGroup))
     }
     return groups
-  }, [filteredOpinions])
+  }, [filteredOpinions, itemsPerGroup])
 
   const groups = groupedOpinions()
 
-  // 6. Autoplay del slider más lento (8s)
+  // 7. Autoplay del slider más lento (8s)
   useEffect(() => {
-    const handleResize = () => {
-      // Forzar recálculo al cambiar tamaño
-      setCurrentSlide(0)
-    }
-
-    window.addEventListener('resize', handleResize)
-    
     const startAutoPlay = () => {
       if (groups.length <= 1) return
       
@@ -89,14 +102,13 @@ const OpinionsComponent = () => {
     startAutoPlay()
     
     return () => {
-      window.removeEventListener('resize', handleResize)
       if (intervalRef.current) {
         clearInterval(intervalRef.current)
       }
     }
   }, [groups.length, isHovered])
 
-  // 7. Funciones de navegación
+  // 8. Funciones de navegación
   const goToSlide = useCallback((index) => {
     setCurrentSlide(index)
     resetInterval()
@@ -121,7 +133,7 @@ const OpinionsComponent = () => {
     }, 8000) // Aumentado a 8 segundos
   }, [groups.length, isHovered])
 
-  // 8. Estados de carga
+  // 9. Estados de carga
   if (loading) {
     return (
       <div className="text-center py-8">
@@ -149,7 +161,7 @@ const OpinionsComponent = () => {
     )
   }
 
-  // 9. Render principal
+  // 10. Render principal
   return (
     <>
       <motion.div
@@ -220,7 +232,7 @@ const OpinionsComponent = () => {
         >
           {groups.map((group, groupIndex) => (
             <div key={groupIndex} className="w-full flex-shrink-0 px-2">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6"> {/* Cambiado a 1 en móvil y 2 en desktop */}
+              <div className={`grid ${itemsPerGroup === 1 ? 'grid-cols-1' : 'grid-cols-2'} gap-6`}>
                 {group.map((opinion) => (
                   <motion.div
                     key={opinion.id}
