@@ -35,7 +35,7 @@ const OpinionsComponent = () => {
     return [...Array(5)].map((_, i) => (
       <div
         key={i}
-        className={`w-4 h-4 ${i < rating ? 'text-yellow-400' : 'text-gray-300'}`}
+        className={`w-5 h-5 ${i < rating ? 'text-yellow-400' : 'text-gray-300'}`}
         aria-label={`${rating} estrellas`}
         aria-hidden={i >= rating}
       >
@@ -55,19 +55,27 @@ const OpinionsComponent = () => {
     ? (opinions.reduce((sum, o) => sum + o.rating, 0) / opinions.length).toFixed(1)
     : '0.0'
 
-  // 5. Agrupamiento de opiniones
+  // 5. Agrupamiento de opiniones - ahora 1 en móvil y 2 en desktop
   const groupedOpinions = useCallback(() => {
     const groups = []
-    for (let i = 0; i < filteredOpinions.length; i += 3) {
-      groups.push(filteredOpinions.slice(i, i + 3))
+    const itemsPerGroup = window.innerWidth < 768 ? 1 : 2
+    for (let i = 0; i < filteredOpinions.length; i += itemsPerGroup) {
+      groups.push(filteredOpinions.slice(i, i + itemsPerGroup))
     }
     return groups
   }, [filteredOpinions])
 
   const groups = groupedOpinions()
 
-  // 6. Autoplay del slider
+  // 6. Autoplay del slider más lento (8s)
   useEffect(() => {
+    const handleResize = () => {
+      // Forzar recálculo al cambiar tamaño
+      setCurrentSlide(0)
+    }
+
+    window.addEventListener('resize', handleResize)
+    
     const startAutoPlay = () => {
       if (groups.length <= 1) return
       
@@ -75,12 +83,13 @@ const OpinionsComponent = () => {
         if (!isHovered) {
           setCurrentSlide(prev => (prev + 1) % groups.length)
         }
-      }, 5000)
+      }, 8000) // Aumentado a 8 segundos
     }
 
     startAutoPlay()
     
     return () => {
+      window.removeEventListener('resize', handleResize)
       if (intervalRef.current) {
         clearInterval(intervalRef.current)
       }
@@ -109,7 +118,7 @@ const OpinionsComponent = () => {
       if (!isHovered && groups.length > 1) {
         setCurrentSlide(prev => (prev + 1) % groups.length)
       }
-    }, 5000)
+    }, 8000) // Aumentado a 8 segundos
   }, [groups.length, isHovered])
 
   // 8. Estados de carga
@@ -203,7 +212,7 @@ const OpinionsComponent = () => {
       >
         <div 
           ref={sliderRef}
-          className="flex transition-transform duration-500 ease-in-out"
+          className="flex transition-transform duration-700 ease-in-out" // Animación más lenta
           style={{ 
             transform: `translateX(-${currentSlide * 100}%)`,
             width: `${groups.length * 100}%`
@@ -211,32 +220,32 @@ const OpinionsComponent = () => {
         >
           {groups.map((group, groupIndex) => (
             <div key={groupIndex} className="w-full flex-shrink-0 px-2">
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6"> {/* Cambiado a 1 en móvil y 2 en desktop */}
                 {group.map((opinion) => (
                   <motion.div
                     key={opinion.id}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.3 }}
-                    className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-sky-100/50 h-full flex flex-col"
+                    transition={{ duration: 0.5 }} // Animación más lenta
+                    className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-sky-100/50 h-full flex flex-col"
                     itemScope
                     itemType="https://schema.org/Review"
                   >
-                    <div className="flex gap-1 mb-2" itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
+                    <div className="flex gap-1 mb-3" itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
                       <meta itemProp="ratingValue" content={opinion.rating} />
                       <meta itemProp="bestRating" content="5" />
                       {renderStars(opinion.rating)}
                     </div>
-                    <blockquote className="text-sky-800 text-sm italic mb-3 flex-grow" itemProp="reviewBody">
+                    <blockquote className="text-sky-800 text-base leading-relaxed italic mb-4 flex-grow" itemProp="reviewBody">
                       "{opinion.content}"
                     </blockquote>
-                    <div className="flex justify-between items-center mt-auto">
+                    <div className="flex justify-between items-center mt-auto pt-3 border-t border-sky-100">
                       <div>
-                        <p className="font-medium text-sky-900 text-sm" itemProp="author">{opinion.name}</p>
-                        <p className="text-xs text-sky-600">{opinion.role}</p>
+                        <p className="font-medium text-sky-900 text-base" itemProp="author">{opinion.name}</p>
+                        <p className="text-sm text-sky-600">{opinion.role}</p>
                       </div>
-                      <span className="text-xs text-sky-500" itemProp="datePublished">{opinion.date}</span>
+                      <span className="text-sm text-sky-500" itemProp="datePublished">{opinion.date}</span>
                     </div>
                   </motion.div>
                 ))}
@@ -249,19 +258,19 @@ const OpinionsComponent = () => {
           <>
             <button
               onClick={goToPrevSlide}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-1.5 rounded-full shadow-md z-10"
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-md z-10 transition-all hover:scale-110"
               aria-label="Opinión anterior"
             >
-              <svg className="w-4 h-4 text-sky-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-sky-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
             <button
               onClick={goToNextSlide}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-1.5 rounded-full shadow-md z-10"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-md z-10 transition-all hover:scale-110"
               aria-label="Siguiente opinión"
             >
-              <svg className="w-4 h-4 text-sky-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-sky-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
@@ -270,13 +279,13 @@ const OpinionsComponent = () => {
       </div>
 
       {groups.length > 1 && (
-        <div className="flex justify-center mt-4 gap-1.5">
+        <div className="flex justify-center mt-6 gap-2">
           {groups.map((_, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`w-2 h-2 rounded-full transition-all ${
-                index === currentSlide ? 'bg-sky-600 w-4' : 'bg-sky-300'
+              className={`w-3 h-3 rounded-full transition-all ${
+                index === currentSlide ? 'bg-sky-600 w-6' : 'bg-sky-300'
               }`}
               aria-label={`Ir a opiniones ${index + 1}`}
             />
@@ -289,17 +298,17 @@ const OpinionsComponent = () => {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ delay: 0.4 }}
-        className="bg-white/80 backdrop-blur-sm p-3 rounded-lg border border-sky-100 text-center max-w-md mx-auto"
+        className="bg-white/80 backdrop-blur-sm p-4 rounded-lg border border-sky-100 text-center max-w-md mx-auto mt-8"
         itemScope
         itemType="https://schema.org/AggregateRating"
       >
-        <div className="flex justify-center items-center gap-1.5 mb-1">
+        <div className="flex justify-center items-center gap-2 mb-2">
           {renderStars(Math.round(parseFloat(averageRating)))}
-          <span className="text-base font-bold text-sky-900" itemProp="ratingValue">{averageRating}</span>
-          <span className="text-base text-sky-700">/</span>
-          <span className="text-base text-sky-700" itemProp="bestRating">5</span>
+          <span className="text-lg font-bold text-sky-900" itemProp="ratingValue">{averageRating}</span>
+          <span className="text-lg text-sky-700">/</span>
+          <span className="text-lg text-sky-700" itemProp="bestRating">5</span>
         </div>
-        <p className="text-xs text-sky-700">
+        <p className="text-sm text-sky-700">
           Basado en <span itemProp="reviewCount">{opinions.length}</span> opiniones
         </p>
       </motion.div>
