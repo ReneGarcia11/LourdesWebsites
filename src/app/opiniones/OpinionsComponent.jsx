@@ -10,6 +10,7 @@ const OpinionsComponent = () => {
   const [opinions, setOpinions] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [expandedOpinions, setExpandedOpinions] = useState({})
   const sliderRef = useRef(null)
   const intervalRef = useRef(null)
 
@@ -30,7 +31,15 @@ const OpinionsComponent = () => {
     fetchOpinions()
   }, [])
 
-  // 3. Renderizado de estrellas mejorado
+  // 3. Alternar expansión de opinión
+  const toggleOpinionExpansion = (id) => {
+    setExpandedOpinions(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }))
+  }
+
+  // 4. Renderizado de estrellas mejorado
   const renderStars = (rating) => {
     return [...Array(5)].map((_, i) => (
       <div
@@ -46,7 +55,7 @@ const OpinionsComponent = () => {
     ))
   }
 
-  // 4. Filtrado y cálculos
+  // 5. Filtrado y cálculos
   const filteredOpinions = activeTab === 'all' 
     ? opinions 
     : opinions.filter(opinion => opinion.rating === parseInt(activeTab))
@@ -55,7 +64,7 @@ const OpinionsComponent = () => {
     ? (opinions.reduce((sum, o) => sum + o.rating, 0) / opinions.length).toFixed(1)
     : '0.0'
 
-  // 5. Agrupamiento de opiniones
+  // 6. Agrupamiento de opiniones
   const groupedOpinions = useCallback(() => {
     const groups = []
     for (let i = 0; i < filteredOpinions.length; i += 3) {
@@ -66,7 +75,7 @@ const OpinionsComponent = () => {
 
   const groups = groupedOpinions()
 
-  // 6. Autoplay del slider
+  // 7. Autoplay del slider
   useEffect(() => {
     const startAutoPlay = () => {
       if (groups.length <= 1) return
@@ -87,7 +96,7 @@ const OpinionsComponent = () => {
     }
   }, [groups.length, isHovered])
 
-  // 7. Funciones de navegación
+  // 8. Funciones de navegación
   const goToSlide = useCallback((index) => {
     setCurrentSlide(index)
     resetInterval()
@@ -112,7 +121,7 @@ const OpinionsComponent = () => {
     }, 5000)
   }, [groups.length, isHovered])
 
-  // 8. Estados de carga mejorados
+  // 9. Estados de carga mejorados
   if (loading) {
     return (
       <div className="text-center py-12">
@@ -147,10 +156,10 @@ const OpinionsComponent = () => {
     )
   }
 
-  // 9. Render principal modernizado
+  // 10. Render principal modernizado
   return (
     <section className="py-12 px-4 bg-gradient-to-b from-sky-50 to-white">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -217,7 +226,7 @@ const OpinionsComponent = () => {
         </motion.div>
 
         <div 
-          className="relative overflow-hidden mb-8 rounded-2xl"
+          className="relative overflow-hidden mb-8"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
@@ -231,35 +240,70 @@ const OpinionsComponent = () => {
           >
             {groups.map((group, groupIndex) => (
               <div key={groupIndex} className="w-full flex-shrink-0 px-3">
-                <div className="grid md:grid-cols-3 gap-5">
-                  {group.map((opinion) => (
-                    <motion.div
-                      key={opinion.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4 }}
-                      className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-sky-100/30 h-full flex flex-col group"
-                      itemScope
-                      itemType="https://schema.org/Review"
-                    >
-                      <div className="flex gap-1 mb-4" itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
-                        <meta itemProp="ratingValue" content={opinion.rating} />
-                        <meta itemProp="bestRating" content="5" />
-                        {renderStars(opinion.rating)}
-                      </div>
-                      <blockquote className="text-sky-800 text-base leading-relaxed mb-4 flex-grow relative before:content-['“'] before:absolute before:-left-1 before:-top-2 before:text-4xl before:text-sky-200 before:font-serif before:leading-none before:opacity-70 before:z-0 pl-4" itemProp="reviewBody">
-                        <span className="relative z-10">"{opinion.content}"</span>
-                      </blockquote>
-                      <div className="flex justify-between items-center mt-auto pt-4 border-t border-sky-100">
-                        <div>
-                          <p className="font-semibold text-sky-900 text-sm" itemProp="author">{opinion.name}</p>
-                          <p className="text-xs text-sky-600 mt-1">{opinion.role}</p>
+                <div className="grid md:grid-cols-3 gap-6">
+                  {group.map((opinion) => {
+                    const isExpanded = expandedOpinions[opinion.id]
+                    const needsTruncation = opinion.content.length > 180
+                    
+                    return (
+                      <motion.div
+                        key={opinion.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4 }}
+                        className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-sky-100/30 flex flex-col h-full group"
+                        itemScope
+                        itemType="https://schema.org/Review"
+                      >
+                        <div className="flex gap-1 mb-4" itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
+                          <meta itemProp="ratingValue" content={opinion.rating} />
+                          <meta itemProp="bestRating" content="5" />
+                          {renderStars(opinion.rating)}
                         </div>
-                        <span className="text-xs text-sky-500 bg-sky-50 py-1 px-2 rounded-full" itemProp="datePublished">{opinion.date}</span>
-                      </div>
-                    </motion.div>
-                  ))}
+                        
+                        <blockquote 
+                          className={`text-sky-800 text-base leading-relaxed mb-4 flex-grow relative before:content-['“'] before:absolute before:-left-1 before:-top-2 before:text-4xl before:text-sky-200 before:font-serif before:leading-none before:opacity-70 before:z-0 pl-4 ${
+                            !isExpanded && needsTruncation ? 'line-clamp-5' : ''
+                          }`} 
+                          itemProp="reviewBody"
+                        >
+                          <span className="relative z-10">"{opinion.content}"</span>
+                        </blockquote>
+                        
+                        {needsTruncation && (
+                          <button
+                            onClick={() => toggleOpinionExpansion(opinion.id)}
+                            className="text-sky-600 hover:text-sky-800 text-sm font-medium mb-4 self-start flex items-center transition-colors"
+                          >
+                            {isExpanded ? (
+                              <>
+                                <span>Leer menos</span>
+                                <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                                </svg>
+                              </>
+                            ) : (
+                              <>
+                                <span>Leer más</span>
+                                <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                              </>
+                            )}
+                          </button>
+                        )}
+                        
+                        <div className="flex justify-between items-center mt-auto pt-4 border-t border-sky-100">
+                          <div>
+                            <p className="font-semibold text-sky-900 text-sm" itemProp="author">{opinion.name}</p>
+                            <p className="text-xs text-sky-600 mt-1">{opinion.role}</p>
+                          </div>
+                          <span className="text-xs text-sky-500 bg-sky-50 py-1 px-2 rounded-full" itemProp="datePublished">{opinion.date}</span>
+                        </div>
+                      </motion.div>
+                    )
+                  })}
                 </div>
               </div>
             ))}
@@ -324,6 +368,15 @@ const OpinionsComponent = () => {
           </p>
         </motion.div>
       </div>
+
+      <style jsx>{`
+        .line-clamp-5 {
+          display: -webkit-box;
+          -webkit-line-clamp: 5;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+      `}</style>
     </section>
   )
 }
