@@ -5,7 +5,15 @@ const nextConfig = {
   output: 'standalone',
   compress: true, // Habilita compresión GZIP para mejor rendimiento
   images: {
-    domains: ['crisisyduelo.com'], // Dominios permitidos para imágenes (opcional si solo usas imágenes locales)
+    // CAMBIO: Se actualizó 'domains' a 'remotePatterns' por seguridad
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'crisisyduelo.com',
+        port: '',
+        pathname: '/**', // Permite todas las rutas de ese dominio
+      },
+    ],
     minimumCacheTTL: 86400, // Cache de imágenes por 1 día
     formats: ['image/webp'], // Prioriza WebP para imágenes
     deviceSizes: [640, 750, 828, 1080, 1200, 1920], // Tamaños estándar para responsive images
