@@ -96,7 +96,7 @@ const ContactForm = () => {
               value={formData.name}
               onChange={handleChange}
               className="w-full px-4 py-3 rounded-xl border border-sky-200/80 text-sky-900  focus:ring-2 focus:ring-sky-300 focus:border-sky-300 transition-all placeholder-sky-300/70"
-              placeholder="Ej: María González"
+              placeholder=""
             />
           </div>
 
