@@ -210,7 +210,7 @@ const Footer = () => {
         <div className="border-t border-gray-700 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p
-              className="text-gray-500 text-sm mb-4 md:mb-0"  // Cambiado de text-gray-400 a text-gray-500
+              className="text-gray-500 text-sm mb-4 md:mb-0"  
               itemProp="copyrightYear"
             >
               © {currentYear} Psic. Lourdes Ramírez. Todos los derechos reservados.

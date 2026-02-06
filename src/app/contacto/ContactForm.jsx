@@ -47,7 +47,7 @@ const ContactForm = () => {
       if (!token) throw new Error('Error de verificación reCAPTCHA')
 
       const whatsappMessage = `¡Hola! 👋\n\n*Datos de contacto:*\n• Nombre: ${formData.name.trim()}\n• Edad: ${formData.age} años\n\nMe gustaría agendar una cita. ¿Podrían ayudarme con los horarios disponibles? 💙`
-      
+
       const encodedMessage = encodeURIComponent(whatsappMessage)
         .replace(/'/g, "%27")
         .replace(/\(/g, "%28")
@@ -95,14 +95,14 @@ const ContactForm = () => {
               minLength="3"
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl border border-sky-200/80 focus:ring-2 focus:ring-sky-300 focus:border-sky-300 transition-all placeholder-sky-300/70"
+              className="w-full px-4 py-3 rounded-xl border border-sky-200/80 text-sky-900  focus:ring-2 focus:ring-sky-300 focus:border-sky-300 transition-all placeholder-sky-300/70"
               placeholder="Ej: María González"
             />
           </div>
 
           <div className="space-y-1">
-            <label htmlFor="age" className="block text-sm font-medium text-sky-800/90 mb-1 items-center">
-              <FaBirthdayCake className="mr-2 text-sky-500" />
+            <label htmlFor="age" className="flex text-sm font-semibold text-sky-900 mb-1 items-center">
+              <FaBirthdayCake className="mr-2 text-sky-600" />
               Edad
             </label>
             <input
@@ -114,7 +114,8 @@ const ContactForm = () => {
               max="120"
               value={formData.age}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl border border-sky-200/80 focus:ring-2 focus:ring-sky-300 focus:border-sky-300 transition-all placeholder-sky-300/70"
+
+              className="w-full px-4 py-3 rounded-xl border-2 border-sky-300 bg-white text-sky-900 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-all placeholder-sky-400"
               placeholder="Ej: 28"
             />
           </div>
@@ -124,11 +125,10 @@ const ContactForm = () => {
             whileTap={{ scale: 0.98 }}
             type="submit"
             disabled={isSubmitting}
-            className={`w-full py-4 px-6 rounded-xl font-semibold shadow-md transition-all flex items-center justify-center space-x-2 ${
-              isSubmitting
+            className={`w-full py-4 px-6 rounded-xl font-semibold shadow-md transition-all flex items-center justify-center space-x-2 ${isSubmitting
                 ? 'bg-sky-400 cursor-not-allowed'
                 : 'bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-600 hover:to-sky-700'
-            }`}
+              }`}
           >
             {isSubmitting ? (
               <span className="text-white">Cargando...</span>
