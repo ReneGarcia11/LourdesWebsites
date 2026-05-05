@@ -11,7 +11,7 @@ const MapComponent = () => {
     address: "Av. Miguel Ángel 14, Real Vallarta, 45020 Zapopan, Jal.",
     googleMapsLink: "https://maps.app.goo.gl/jXZdjqTew6xgrPqMA", // Asegúrate de poner el link real aquí
     exactIframeUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1319.736302946811!2d-103.42485128086965!3d20.678610679226484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8428af8dd124be45%3A0x6912a015055fe2d!2sCl%C3%ADnica%20BriZuela!5e0!3m2!1ses!2smx!4v1751582885858!5m2!1ses!2smx", // Asegúrate de poner el src del iframe real aquí
-    telephone: "+52 33 1234 5678",
+    telephone: "++52 33 3955 5642",
     openingHours: "Lunes a Viernes: 09:00 - 20:00",
     seoKeywords: [
       "consultorio psicológico Zapopan",
