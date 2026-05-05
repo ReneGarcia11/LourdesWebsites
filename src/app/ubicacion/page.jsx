@@ -44,7 +44,7 @@ export default function UbicacionPage() {
       <div className="sr-only" aria-hidden="true">
         <h1>Ubicación Clínica BriZuela - Psicólogos en Zapopan</h1>
         <p>Avenida Miguel angel 14, Colonia, Real Vallarta, 45020 Zapopan, Jal.</p>
-        <p>Teléfono: +52 33 1234 5678</p>
+        <p>Teléfono: +52 33 3955 5642</p>
         <p>Horario: Lunes a Viernes de 9:00 a 18:00</p>
         <p>Coordenadas GPS: 20.67902, -103.4243</p>
       </div>
